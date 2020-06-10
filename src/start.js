@@ -5,4 +5,3 @@ const app = require('./app');
 
 const port = parseInt(process.env.PORT, 10) || 4500;
 app.listen(port, () => logger.info(`Zero hunger ready at ${port}`));
-module.exports = start;

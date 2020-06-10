@@ -1,0 +1,9 @@
+{
+  "secret": "zerohunger",
+  "development": {
+    "url": "mongodb+srv://htolajide:olajide4me@cluster0-kpchb.mongodb.net/test?retryWrites=true&w=majority"
+  },
+  "test": {
+    "url": "mongodb+srv://tfkconsult:olajide4real@cluster0-vkmry.mongodb.net/test?retryWrites=true&w=majority"
+  }
+}

@@ -1,3 +1,4 @@
 GET / 404 139 - 8.544 ms
 GET / 200 - - 16.306 ms
 GET /favicon.ico 200 - - 6.725 ms
+GET /api/v1/Lagos/Yam/sellers 200 533 - 10275.856 ms

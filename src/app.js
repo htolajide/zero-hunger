@@ -37,8 +37,8 @@ app.use(express.static(__dirname + '../www'));
 connectDB();
 
 routes(app);
-
-app.get('*', (req, res) => { res.end('Zero Hunger Backend!!!'); });
+app.use(express.static(__dirname + '/www'));
+app.get('/welcome', (req, res) => { res.end('Zero Hunger Backend!!!'); });
 app.listen(port, () => logger.info(`Zero hunger ready at ${port}`));
 
 module.exports = app;

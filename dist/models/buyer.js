@@ -2,7 +2,7 @@
 
 var mongoose = require('mongoose');
 
-var farmerSchema = mongoose.Schema({
+var buyerSchema = mongoose.Schema({
   fullname: {
     type: String,
     required: true
@@ -29,4 +29,4 @@ var farmerSchema = mongoose.Schema({
     type: Date
   }
 });
-module.exports = mongoose.model('Farmer', farmerSchema);
+module.exports = mongoose.model('Buyer', buyerSchema);

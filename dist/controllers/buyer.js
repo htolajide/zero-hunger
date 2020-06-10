@@ -23,11 +23,11 @@ var _emailer = _interopRequireDefault(require("../config/emailer"));
 
 var _location = _interopRequireDefault(require("./location"));
 
-var Farmer = require('../models/farmer');
-
-var FarmerStock = require('../models/farmerStock');
+var Buyer = require('../models/buyer');
 
 var Sales = require('../models/sales');
+
+var FarmerStock = require('../models/farmerStock');
 
 var _default = {
   signup: function signup(req, res) {
@@ -37,12 +37,12 @@ var _default = {
 
     _axios["default"].get(_location["default"].url).then( /*#__PURE__*/function () {
       var _ref = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(result) {
-        var farmer;
+        var buyer;
         return _regenerator["default"].wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                _context.t0 = Farmer;
+                _context.t0 = Buyer;
                 _context.t1 = fullname;
                 _context.t2 = email;
                 _context.next = 5;
@@ -61,8 +61,8 @@ var _default = {
                   created_at: _context.t5,
                   updated_at: _context.t6
                 };
-                farmer = new _context.t0(_context.t7);
-                Farmer.findOne({
+                buyer = new _context.t0(_context.t7);
+                Buyer.findOne({
                   email: email
                 }).then(function (result) {
                   if (result) {
@@ -72,12 +72,12 @@ var _default = {
                     });
                   }
 
-                  farmer.save().then(function (userData) {
+                  buyer.save().then(function (userData) {
                     var token = _jsonwebtoken["default"].sign({
                       userId: userData._id
                     }, process.env.SECRET ? process.env.SECRET : _config["default"].secret);
 
-                    res.cookie('farmerid', userData._id, {
+                    res.cookie('buyerid', userData._id, {
                       expires: new Date(Date.now() + 7200000),
                       httpOnly: true
                     });
@@ -88,7 +88,7 @@ var _default = {
                     res.status(201).json({
                       status: 'Success',
                       message: 'account successfully created',
-                      cookieUserid: res.cookie.farmerid,
+                      cookieUserid: res.cookie.buyerid,
                       token: token,
                       userData: userData
                     });
@@ -120,8 +120,8 @@ var _default = {
     });
   },
   getAll: function getAll(req, res) {
-    Farmer.find().then(function (farmers) {
-      res.status(200).json(farmers);
+    Buyer.find().then(function (buyers) {
+      res.status(200).json(buyers);
     })["catch"](function (error) {
       res.status(400).json({
         error: error.message
@@ -131,16 +131,16 @@ var _default = {
   login: function login(req, res) {
     var email = req.body.email,
         password = req.body.password;
-    Farmer.findOne({
+    Buyer.findOne({
       email: email
     }).then( /*#__PURE__*/function () {
-      var _ref2 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee2(farmer) {
+      var _ref2 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee2(buyer) {
         var match, token;
         return _regenerator["default"].wrap(function _callee2$(_context2) {
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
-                if (farmer) {
+                if (buyer) {
                   _context2.next = 2;
                   break;
                 }
@@ -152,7 +152,7 @@ var _default = {
 
               case 2:
                 _context2.next = 4;
-                return _bcrypt["default"].compare(password, farmer.password);
+                return _bcrypt["default"].compare(password, buyer.password);
 
               case 4:
                 match = _context2.sent;
@@ -170,9 +170,9 @@ var _default = {
               case 7:
                 // sign jwt and wrap in a cookie
                 token = _jsonwebtoken["default"].sign({
-                  userId: farmer._id
+                  userId: buyer._id
                 }, process.env.SECRET ? process.env.SECRET : _config["default"].secret);
-                res.cookie('farmerid', farmer._id, {
+                res.cookie('buyerid', buyer._id, {
                   expires: new Date(Date.now() + 7200000),
                   httpOnly: true
                 });
@@ -182,7 +182,7 @@ var _default = {
                 });
                 return _context2.abrupt("return", res.status(200).json({
                   token: token,
-                  farmer_id: farmer._id
+                  buyer_id: buyer._id
                 }));
 
               case 11:
@@ -198,14 +198,15 @@ var _default = {
       };
     }())["catch"](function (error) {
       res.status(400).json({
-        error: error.message
+        status: 'Failed',
+        message: error.message
       });
     });
   },
   resetPassword: function resetPassword(req, res) {
     var email = req.body.email,
         password = req.body.password;
-    Farmer.findOne({
+    Buyer.findOne({
       email: email
     }).then( /*#__PURE__*/function () {
       var _ref3 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee3(result) {
@@ -224,7 +225,7 @@ var _default = {
                 }));
 
               case 2:
-                _context3.t0 = Farmer;
+                _context3.t0 = Buyer;
                 _context3.t1 = {
                   email: email
                 };
@@ -256,28 +257,29 @@ var _default = {
       };
     }())["catch"](function (error) {
       res.status(400).json({
-        error: error.message
+        status: 'Failed',
+        message: error.message
       });
     });
   },
-  editFarmer: function () {
-    var _editFarmer = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee5(req, res) {
+  editBuyer: function () {
+    var _editBuyer = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee5(req, res) {
       var fullname, email, password;
       return _regenerator["default"].wrap(function _callee5$(_context5) {
         while (1) {
           switch (_context5.prev = _context5.next) {
             case 0:
-              fullname = req.body.fullname, email = req.body.email, password = req.body.password;
+              fullname = req.body.fullname, email = req.body.email, password = req.body;
 
               _axios["default"].get(_location["default"].url).then( /*#__PURE__*/function () {
                 var _ref4 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee4(result) {
-                  var farmer;
+                  var buyer;
                   return _regenerator["default"].wrap(function _callee4$(_context4) {
                     while (1) {
                       switch (_context4.prev = _context4.next) {
                         case 0:
-                          _context4.t0 = Farmer;
-                          _context4.t1 = req.cookies.farmerid;
+                          _context4.t0 = Buyer;
+                          _context4.t1 = req.cookies.buyerid;
                           _context4.t2 = fullname;
                           _context4.t3 = email;
                           _context4.next = 6;
@@ -295,17 +297,18 @@ var _default = {
                             city: _context4.t5,
                             updated_at: _context4.t6
                           };
-                          farmer = new _context4.t0(_context4.t7);
-                          Farmer.updateOne({
-                            _id: req.cookies.farmerid
-                          }, farmer).then(function () {
+                          buyer = new _context4.t0(_context4.t7);
+                          Buyer.updateOne({
+                            _id: req.cookies.buyerid
+                          }, buyer).then(function () {
                             res.status(201).json({
                               status: 'Success',
                               message: 'account successfully updated'
                             });
                           })["catch"](function (error) {
                             res.status(400).json({
-                              error: error.message
+                              status: 'Failed',
+                              message: error.message
                             });
                           });
 
@@ -335,18 +338,18 @@ var _default = {
       }, _callee5);
     }));
 
-    function editFarmer(_x4, _x5) {
-      return _editFarmer.apply(this, arguments);
+    function editBuyer(_x4, _x5) {
+      return _editBuyer.apply(this, arguments);
     }
 
-    return editFarmer;
+    return editBuyer;
   }(),
   deleteOne: function deleteOne(req, res) {
-    Farmer.deleteOne({
+    Buyer.deleteOne({
       _id: req.params.id
     }).then(function () {
       res.status(200).json({
-        message: "Farmer deleted successfully!"
+        message: "Buyer deleted successfully!"
       });
     })["catch"](function (error) {
       res.status(400).json({
@@ -355,9 +358,9 @@ var _default = {
     });
   },
   deleteAll: function deleteAll(req, res) {
-    Farmer.deleteMany().then(function () {
+    Buyer.deleteMany().then(function () {
       res.status(200).json({
-        message: "Farmers deleted successfully!"
+        message: "Buyers deleted successfully!"
       });
     })["catch"](function (error) {
       res.status(400).json({
@@ -365,31 +368,37 @@ var _default = {
       });
     });
   },
-  addProduct: function addProduct(req, res) {
+  buyProduct: function buyProduct(req, res) {
     var name = req.body.name,
         unit = req.body.unit,
         quantity = req.body.quantity,
-        price = req.body.price;
-    var farmerid = req.cookies.farmerid;
-
-    _axios["default"].get(_location["default"].url).then(function (result) {
-      var stock = new FarmerStock({
-        farmer_id: req.cookies.farmerid,
-        product_name: name,
-        unit: unit,
-        quantity: quantity,
-        price: price,
-        location: result.data.city
+        price = req.body.price,
+        farmerid = req.body.farmerid;
+    var sales = new Sales({
+      buyer_id: req.cookies.buyerid,
+      farmer_id: farmerid,
+      product_name: name,
+      unit: unit,
+      quantity: quantity,
+      price: price,
+      token: req.cookies.token
+    });
+    FarmerStock.findOne({
+      product_name: name,
+      farmer_id: farmerid
+    }).then(function (result) {
+      if (result.quantity < quantity) return res.status(400).json({
+        status: 'failed',
+        message: 'quantity not sufficient'
       });
-      FarmerStock.findOne({
+      var updatedQuantity = result.quantity - quantity;
+      FarmerStock.updateOne({
         product_name: name,
         farmer_id: farmerid
-      }).then(function (result) {
-        if (result) return res.status(403).json({
-          status: 'failed',
-          message: 'product is in stock'
-        });
-        stock.save().then(function (data) {
+      }, {
+        quantity: updatedQuantity
+      }).then(function () {
+        sales.save().then(function (data) {
           res.status(201).json({
             status: 'success',
             data: data
@@ -402,98 +411,20 @@ var _default = {
         });
       })["catch"](function (error) {
         return res.status(400).json({
-          status: 'Failed',
-          message: error.message
-        });
-      });
-    })["catch"](function (error) {
-      return res.status(400).json({
-        status: 'Failed',
-        message: error.message
-      });
-    });
-  },
-  getProducts: function getProducts(req, res) {
-    FarmerStock.find({
-      farmer_id: req.cookies.farmerid
-    }).then(function (stock) {
-      res.status(200).json({
-        stock: stock
-      });
-    })["catch"](function (error) {
-      return res.status(400).json({
-        status: 'failed',
-        message: error.message
-      });
-    });
-  },
-  showProducts: function showProducts(req, res) {
-    _axios["default"].get(_location["default"].url).then(function (result) {
-      FarmerStock.find({
-        location: result.data.city
-      }).then(function (products) {
-        if (!products) return res.status(400).json({
-          status: 'Failed',
-          message: 'Products not found'
-        });
-        res.status(200).json({
-          products: products
-        });
-      })["catch"](function (error) {
-        return res.status(400).json({
-          status: 'Failed',
-          message: error.message
-        });
-      });
-    })["catch"](function (error) {
-      return res.status(400).json({
-        status: 'Failed',
-        message: error.message
-      });
-    });
-  },
-  editProduct: function editProduct(req, res) {
-    var name = req.body.name,
-        unit = req.body.unit,
-        quantity = req.body.quantity,
-        price = req.body.price;
-    var farmerid = req.cookies.farmerid;
-
-    _axios["default"].get(_location["default"].url).then(function (result) {
-      var stock = new FarmerStock({
-        _id: req.params.id,
-        farmer_id: farmerid,
-        product_name: name,
-        unit: unit,
-        quantity: quantity,
-        price: price,
-        location: result.data.city,
-        updated_at: new Date()
-      });
-      FarmerStock.updateOne({
-        _id: req.params.id,
-        farmer_id: farmerid
-      }, stock).then(function () {
-        res.status(201).json({
-          status: 'success',
-          message: 'Product successfully edited'
-        });
-      })["catch"](function (error) {
-        return res.status(400).json({
           status: 'failed',
           message: error.message
         });
       });
     })["catch"](function (error) {
       return res.status(400).json({
-        status: 'failed',
+        status: 'Failed',
         message: error.message
       });
     });
   },
   getSales: function getSales(req, res) {
     Sales.find({
-      farmer_id: req.cookies.farmerid
+      token: req.cookies.token
     }).then(function (stock) {
       res.status(200).json({
         stock: stock
@@ -501,65 +432,6 @@ var _default = {
     })["catch"](function (error) {
       return res.status(400).json({
         status: 'failed',
-        message: error.message
-      });
-    });
-  },
-  getSellers: function getSellers(req, res) {
-    var ids = []; // store farmer ids
-
-    var farmers = []; // store farmers
-
-    var output = []; // store output
-    // get all farmers
-
-    Farmer.find({
-      city: req.params.city
-    }).then(function (farmer) {
-      farmer.map(function (item) {
-        farmers.push({
-          farmerid: item._id,
-          name: item.fullname,
-          email: item.email,
-          city: item.city
-        });
-      });
-    })["catch"](function (error) {
-      return res.status(400).json({
-        error: error.message
-      });
-    }); // get stock information
-
-    FarmerStock.find({
-      product_name: req.params.product,
-      location: req.params.city
-    }).then(function (result) {
-      result.map(function (item) {
-        ids.push({
-          farmerid: item.farmer_id,
-          product_name: item.product_name,
-          price: item.price,
-          quantity: item.quantity,
-          unit: item.unit
-        });
-      }); // loop through fetched seller/farmer and return name and stock info
-
-      ids.forEach(function (id) {
-        var result = farmers.filter(function (farmer) {
-          farmer.price = id.price;
-          farmer.product_name = id.product_name;
-          farmer.quantity = "".concat(id.quantity, " ").concat(id.unit);
-          if (farmer.farmerid == id.farmerid) return farmer;
-        });
-        output.push(result[0]);
-      });
-      res.status(200).json({
-        status: 'success',
-        result: output
-      });
-    })["catch"](function (error) {
-      return res.status(400).json({
-        status: 'Failed',
         message: error.message
       });
     });

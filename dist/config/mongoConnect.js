@@ -2,42 +2,30 @@
 
 var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
 
-var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
-
-var _asyncToGenerator2 = _interopRequireDefault(require("@babel/runtime/helpers/asyncToGenerator"));
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = void 0;
 
 var _mongoose = _interopRequireDefault(require("mongoose"));
 
+var _config = _interopRequireDefault(require("./config.json"));
+
 var logger = require('simple-node-logger').createSimpleLogger();
 
-var connectDB = /*#__PURE__*/function () {
-  var _ref = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee() {
-    return _regenerator["default"].wrap(function _callee$(_context) {
-      while (1) {
-        switch (_context.prev = _context.next) {
-          case 0:
-            _context.next = 2;
-            return _mongoose["default"].connect("mongodb+srv://htolajide:olajide4me@cluster0-kpchb.mongodb.net/test?retryWrites=true&w=majority", {
-              useNewUrlParser: true,
-              useUnifiedTopology: true
-            }).then(function () {
-              logger.info("Successfully connected to MongoDB Atlas!");
-            })["catch"](function (error) {
-              logger.error("Unable to connect to MongoDb Atlas!");
-              logger.error(error.message);
-            });
+var connectDB = function connectDB() {
+  var url = process.env.NODE_ENV === 'test' ? _config["default"].test.url : _config["default"].development.url;
 
-          case 2:
-          case "end":
-            return _context.stop();
-        }
-      }
-    }, _callee);
-  }));
+  _mongoose["default"].connect(url, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+  }).then(function () {
+    logger.info("Successfully connected to MongoDB Atlas!");
+  })["catch"](function (error) {
+    logger.error("Unable to connect to MongoDb Atlas!");
+    logger.error(error.message);
+  });
+};
 
-  return function connectDB() {
-    return _ref.apply(this, arguments);
-  };
-}();
-
-module.exports = connectDB;
+var _default = connectDB;
+exports["default"] = _default;

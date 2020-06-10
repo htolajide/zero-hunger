@@ -1,1 +1,1 @@
-web: node dist/start.js
+web: node app/dist/start.js

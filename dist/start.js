@@ -1,14 +1,12 @@
 "use strict";
 
-var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
+var logger = require('simple-node-logger').createSimpleLogger();
 
-var _app = _interopRequireDefault(require("./app"));
-
-var logger = require('simple-node-logger').createSimpleLogger(); // store the port number
+var app = require('./app'); // store the port number
+// http://api.ipstack.com/197.210.53.116?access_key=c934a4c422466d14bb4cdcd82fa49547
 
 
 var port = parseInt(process.env.PORT, 10) || 4500;
-
-_app["default"].listen(port, function () {
+app.listen(port, function () {
   return logger.info("Zero hunger ready at ".concat(port));
 });

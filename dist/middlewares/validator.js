@@ -56,14 +56,6 @@ var _default = {
     }
 
     return next();
-  },
-  checkProductIdParams: function checkProductIdParams(req, res, next) {
-    var productId = req.params.productId;
-    var parsedNumber = parseInt(productId, 10);
-    var isInteger = Number.isInteger(parsedNumber);
-    var isGreaterThanZero = parsedNumber > 0;
-    if (isInteger && isGreaterThanZero) return next();
-    return res.status(400).json('ID must be an integer greater than zero');
   }
 };
 exports["default"] = _default;

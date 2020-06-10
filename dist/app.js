@@ -22,6 +22,8 @@ var _mongoConnect = _interopRequireDefault(require("./config/mongoConnect"));
 var rfs = require('rotating-file-stream'); // version 2.x
 
 
+var logger = require('simple-node-logger').createSimpleLogger();
+
 _dotenv["default"].config(); // set up express app
 
 
@@ -30,7 +32,8 @@ var requestLogStream = rfs.createStream('request.log', {
   interval: '1d',
   // rotate daily
   path: _path["default"].join(__dirname, 'logs')
-}); // to resolve cross origin resource shearing (CORS) error add folowing to te response header 
+});
+var port = parseInt(process.env.PORT, 10) || 4500; // to resolve cross origin resource shearing (CORS) error add folowing to te response header 
 
 app.use(function (req, res, next) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -54,6 +57,8 @@ app.use(_express["default"]["static"](__dirname + '../www'));
 (0, _routes["default"])(app);
 app.get('*', function (req, res) {
   res.end('Zero Hunger Backend!!!');
-}); //app.listen(port, () => logger.info(`Zero hunger ready at ${port}`));
-
+});
+app.listen(port, function () {
+  return logger.info("Zero hunger ready at ".concat(port));
+});
 module.exports = app;

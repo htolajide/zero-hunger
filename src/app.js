@@ -7,6 +7,7 @@ import path from 'path';
 const rfs = require('rotating-file-stream'); // version 2.x
 import routes from './routes';
 import connectDB from './config/mongoConnect';
+const logger = require('simple-node-logger').createSimpleLogger();
 
 dotenv.config();
 
@@ -16,7 +17,7 @@ const requestLogStream = rfs.createStream('request.log', {
   interval: '1d', // rotate daily
   path: path.join(__dirname, 'logs')
 });
-
+const port = parseInt(process.env.PORT, 10) || 4500;
 // to resolve cross origin resource shearing (CORS) error add folowing to te response header 
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -38,6 +39,6 @@ connectDB();
 routes(app);
 
 app.get('*', (req, res) => { res.end('Zero Hunger Backend!!!'); });
-//app.listen(port, () => logger.info(`Zero hunger ready at ${port}`));
+app.listen(port, () => logger.info(`Zero hunger ready at ${port}`));
 
 module.exports = app;

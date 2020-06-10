@@ -16,9 +16,9 @@
     "lint-test": "eslint . && jest --no-cache ./* ",
     "build": "babel src --out-dir dist --copy-files",
     "clean": "rm -rf dist && mkdir dist",
-    "start": "node dist/start.js",
+    "start": "node dist/app.js",
     "heroku-postbuild": "npm run clean && npm run build --prod",
-    "start-mon": "nodemon --exec babel-node src/start.js"
+    "start-mon": "nodemon --exec babel-node src/app.js"
   },
   "jest": {
     "testEnvironment": "node",

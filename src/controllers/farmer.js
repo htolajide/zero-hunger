@@ -81,6 +81,7 @@ export default{
         res.cookie('farmerid', farmer._id, { expires: new Date(Date.now() + 7200000), httpOnly: true });
         res.cookie('token', token, { expires: new Date(Date.now() + 7200000), httpOnly: true });
         return res.status(200).json({
+          status: 'Success',
           token: token, 
           farmer_id: farmer._id
         });

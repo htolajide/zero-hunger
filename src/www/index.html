@@ -4,9 +4,11 @@
     <head>
         <meta name="format-detection" content="telephone=no">
         <meta name="msapplication-tap-highlight" content="no">
+        <meta name="description" content="this is an hybrid zero-hunger app">
         <meta name="viewport" content="initial-scale=1, width=device-width, viewport-fit=cover">
         <link rel="stylesheet" type="text/css" href="css/index.css">
         <link rel="stylesheet" type="text/css" media="screen and (min-width: 480px)" href="css/index_web.css">
+        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
         <title>ZeroHunger</title>
     </head>
     <body>
@@ -51,12 +53,12 @@
             <h1 class="title_bright">Login</h1>
             
             <div class="input_">  
-                <input  type="text" placeholder="Email">   
+                <input  type="text" id="email" placeholder="Email">   
             </div>
             <div class="input_">  
-                <input  type="Password" placeholder="Password">   
+                <input  type="Password" id="password" placeholder="Password">   
             </div>
-            <button class="btn_larger">Sign in</button>
+            <button class="btn_larger" id="signin" onclick=login()>Sign in</button>
         
             <button class="btn_larger" style="background: #d14b72;" onclick=closeSignin()>Cancel</button>
             <p class="sub_title">dont have an account? <b class="complement_three" onclick=openRegister()>register</b></p>
@@ -72,7 +74,7 @@
             <div class="input_">  
                 <input  type="Password" placeholder="Password">   
             </div>
-            <button class="btn_larger">Register</button>
+            <button class="btn_larger" onclick="">Register</button>
             <button class="btn_larger" style="background: #d14b72;" onclick=closeRegister()>Cancel</button>
             
         </div>
@@ -80,9 +82,8 @@
             <img src="img/sun.png" class="logo">
             <h1 class="title_bright">Good Food, Great Prices</h1>
             <img src="img/farm.gif" class="welcome_image">
-            <button class="btn_larger" onclick=closeInxdex()>Buy</button>
-            <button class="btn_larger" style="background: #73d14b;" onclick=openSignin()>Sell</button>
-            
+            <button class="btn_larger" onclick=closexIndex()>Buy</button>
+            <button class="btn_larger" style="background: #73d14b;" onclick=openSignin()>Sell</button>  
         </div>
 
         <div class="full_page" id="place_order">
@@ -229,7 +230,7 @@
                             <input  type="number" placeholder="50" value="50" readonly id="tomatoes_selling_price">
                             <img src="img/icons/sell.svg" onclick=increment("tomatoes_selling_price")>
                         </div>
-                        <button class="btn_larger" onclick="" >Add to store</button>
+                        <button class="btn_larger" onclick=openSignin() >Add to store</button>
                     </div>
                     <div class="content_box_large">
                         <img src="img/food/pepper.png" class="item_image">
@@ -242,7 +243,7 @@
                             <input  type="number" placeholder="50" value="50" readonly id="pepper_selling_price">
                             <img src="img/icons/sell.svg" onclick=increment("pepper_selling_price")>
                         </div>
-                        <button class="btn_larger" onclick="" >Add to store</button>
+                        <button class="btn_larger" onclick=openSignin() >Add to store</button>
                     </div>
                     <div class="content_box_large">
                         <img src="img/food/orange.png" class="item_image">
@@ -255,7 +256,7 @@
                             <input  type="number" placeholder="50" value="50" readonly id="orange_selling_price">
                             <img src="img/icons/sell.svg" onclick=increment("orange_selling_price")>
                         </div>
-                        <button class="btn_larger" onclick="" >Add to store</button>
+                        <button class="btn_larger" onclick=openSignin() >Add to store</button>
                     </div>
                     <div class="content_box_large">
                         <img src="img/food/onion.png" class="item_image">
@@ -268,7 +269,7 @@
                             <input  type="number" placeholder="50" value="50" readonly id="onion_selling_price">
                             <img src="img/icons/sell.svg" onclick=increment("onion_selling_price")>
                         </div>
-                        <button class="btn_larger" onclick="" >Add to store</button>
+                        <button class="btn_larger" onclick=openSignin() >Add to store</button>
                     </div>
 
                 </div>
@@ -323,20 +324,16 @@
             <div class="content_list_column" id="more_selection" style="display:none;"> 
                 <h1 class="title_bright">More</h1>
                 <div class="content_list" style="justify-content: center;">
-                    <button class="btn_larger" onclick=openInxdex()>Logout</button>
+                    <button class="btn_larger" onclick=openxIndex()>Logout</button>
                 </div>
             </div>
-
-
         </div>
-
-
         <div class="container_header">
                 <div class="menu_box" id="buy_nav" onclick=nav("buy")>
                     <img src="img/icons/buy.svg" class="menu_box_icon">
                     <p class="menu_box_text">Buy</p>
                 </div>
-                <div class="menu_box" id="sell_nav" onclick=nav("sell")>
+                <div class="menu_box" id="sell_nav" onclick=openSignin()>
                     <img src="img/icons/sell.svg" class="menu_box_icon">
                     <p class="menu_box_text">Sell</p>
                 </div>

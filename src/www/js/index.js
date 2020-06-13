@@ -1,3 +1,4 @@
+ 
 var Team = {
     name:"Team-031",
     project:"Zero Hunger",
@@ -59,14 +60,15 @@ nav=(x)=>
             break;
 	}
 }
-var closeInxdex;
-closeInxdex=()=>
+var closexIndex;
+closexIndex=()=>
 {
 	//closes index screen
 	document.getElementById("index_page").style.marginLeft="-100vw";
+	nav("buy");
 }
-var openInxdex;
-openInxdex=()=>
+var openxIndex;
+openxIndex=()=>
 {
 	//index screen, to select opition to buy or sell prodect.
 	document.getElementById("index_page").style.marginLeft="0vw";
@@ -157,5 +159,26 @@ decrement=(x)=>
 	}
 	
 }
-
+var login;
+login = () => {
+	let email = document.getElementById('email').value;
+	let password = document.getElementById('password').value;
+	const signin_btn = document.getElementById('signin');
+	const url = 'https://zero-hunger.herokuapp.com/api/v1/farmer/login';
+	const parameter = {
+		method: 'post',
+		url: url,
+		body: { email: email, password: password },
+	}
+	const body = { email: email, password: password };
+	signin_btn.textContent = 'signing in...';
+	axios.post(url, body).then(response => {
+		const responseData = response.data;
+		if(responseData.status === 'success') {
+			console.log(responseData);
+			nav("sell");
+		};
+		alert(responseData.status);
+	}).catch(error => alert(`Login Failed: ${error}`))
+}
 //add new fuctions / features.

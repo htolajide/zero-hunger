@@ -44,7 +44,7 @@ nav=(x)=>
             document.getElementById("sell_section").style.display="none";
             document.getElementById("my_store").style.display="flex";
 			document.getElementById("more_selection").style.display="none";
-			loadProfile();
+			loadStore();
 			}else openSignin()
             break;
         case "more":
@@ -211,8 +211,8 @@ login = () => {
 		};
 	}).catch(error => alert(`Login Failed: ${error}`))
 }
-
-openSellAfterRegister=()=>
+var openSellAfterRegister;
+openSellAfterRegister = () =>
 {
 	//closes signin screen
 	document.getElementById("register_page").style.marginLeft="-100vw";

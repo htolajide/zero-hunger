@@ -66,15 +66,15 @@
         <div class="full_page" id="register_page">
             <h1 class="title_bright">Get started</h1>
             <div class="input_">  
-                <input  type="text" placeholder="Email">   
+                <input  type="text" id="r_email" placeholder="Email">   
             </div>
             <div class="input_">  
-                <input  type="text" placeholder="Full name">   
+                <input  type="text" id="r_fullname" placeholder="Full name">   
             </div>
             <div class="input_">  
-                <input  type="Password" placeholder="Password">   
+                <input  type="Password" id="r_password" placeholder="Password">   
             </div>
-            <button class="btn_larger" onclick="">Register</button>
+            <button class="btn_larger" id="register" onclick=register()>Register</button>
             <button class="btn_larger" style="background: #d14b72;" onclick=closeRegister()>Cancel</button>
             
         </div>
@@ -277,12 +277,12 @@
             <!-- my store page -->
             <div class="content_list_column" id="my_store" style="display:none;"> 
                 <div class="store_head">
-                    <div class="pro_pic" style="background:#4b72d1;">
+                    <div class="pro_pic" id="initial" style="background:#4b72d1;">
                         F
                     </div>
-                    <h2 class="title_small" style="color:#fff;">Franklin Ejike's store</h2>
-                    <p class="sub_title" style="color:#fff;">ejike.franklin@ymail.com</p>
-                    <p class="sub_title" style="color:#fff;">Lagos</p>
+                    <h2 class="title_small" id="p_fullname" style="color:#fff;">Franklin Ejike's store</h2>
+                    <p class="sub_title" id="p_email" style="color:#fff;">ejike.franklin@ymail.com</p>
+                    <p class="sub_title" id="location" style="color:#fff;">Lagos</p>
 
                 </div>
                 <h1 class="title_bright">My products</h1>

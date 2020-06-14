@@ -83,7 +83,10 @@ export default{
         return res.status(200).json({
           status: 'Success',
           token: token, 
-          farmer_id: farmer._id
+          farmer_id: farmer._id,
+          fullname: farmer.fullname,
+          email: farmer.email,
+          city: farmer.city
         });
       })
       .catch(

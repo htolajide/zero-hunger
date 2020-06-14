@@ -248,8 +248,8 @@ register = () => {
 		};
 	}).catch(error => alert(`Login Failed: ${error}`))
 }
-var loadProfile;
-loadProfile = () => {
+var loadStore;
+loadStore = () => {
 	const fullname = sessionStorage.getItem('fullname');
 	const email = sessionStorage.getItem('email');
 	const city = sessionStorage.getItem('city')
@@ -258,5 +258,20 @@ loadProfile = () => {
 	document.getElementById('p_email').textContent = email;
 	document.getElementById('p_fullname').textContent = fullname;
 	document.getElementById('city').textContent = city;
+	axios.get('https://zero-hunger.herokuapp.com/api/v1/farmer/products')
+	.then( response => {
+		if(response.data.length > 0){
+			response.data.map( product => {
+				const child = `<div class="content_box">
+				<img src="img/food/tomato.png" class="item_image">
+				<h2 class="title_small">${product.product_name}</h2>
+				<input type:"hidden" id:"p_id" value:"${product._id}" />
+				<button class="btn" onclick="" style="background:#d14b72;">remove</button>
+				</div>`
+				document.getElementById('my_store').appendChild();
+			})
+		}
+	})
+	.catch(error => alert(error))
 }
 //add new fuctions / features.

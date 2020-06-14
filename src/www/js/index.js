@@ -256,7 +256,7 @@ loadProfile = () => {
 	const initial = fullname.charAt(0).toLocaleUpperCase();
 	document.getElementById('initial').textContent = initial;
 	document.getElementById('p_email').textContent = email;
-	document.getElementById('full_name').textContent = fullname;
+	document.getElementById('p_fullname').textContent = fullname;
 	document.getElementById('city').textContent = city;
 }
 //add new fuctions / features.

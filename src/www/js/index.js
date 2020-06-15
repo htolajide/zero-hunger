@@ -259,12 +259,14 @@ loadStore = () => {
 	document.getElementById('p_fullname').textContent = fullname;
 	document.getElementById('city').textContent = city;
 	const requestOptions = {
-  		headers: {
-			Authorization: `Bearer ${'token'}`,
-			//'Content-type': 'application/x-www-form-urlencoded'
-		}
+		  url: 'https://zero-hunger.herokuapp.com/api/v1/farmer/products',
+		  method: 'get',
+		  headers: {
+			  cookies: `farmerid=${sessionStorage.getItem('farmerid')}; token=${sessionStorage.getItem('token')}`
+		  }
 	};
-	axios.get('https://zero-hunger.herokuapp.com/api/v1/farmer/products', requestOptions)
+	
+	axios.request(requestOptions)
 	.then( response => {
 		console.log('response', response);
 		if(response.length > 0){

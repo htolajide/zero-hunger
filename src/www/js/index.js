@@ -269,10 +269,12 @@ loadStore = () => {
 		  url: 'https://zero-hunger.herokuapp.com/api/v1/farmer/products',
 		  method: 'get',
 		  headers: {
-			  Cookie: `farmerid=${sessionStorage.getItem('farmerid')}; token=${sessionStorage.getItem('token')}`
+			  cookies: `farmerid=${sessionStorage.getItem('farmerid')}; token=${sessionStorage.getItem('token')}`
 		  }
 	};
 	header.textContent = 'Loading products...';
+	// checking for cookies
+	console.log('cookies', document.cookie);
 	axios.request(requestOptions)
 	.then( response => {
 		console.log('response', response.data.stock);
@@ -284,7 +286,8 @@ loadStore = () => {
 				<input type:"hidden" id:"p_id" value:"${product._id}" />
 				<button class="btn" onclick="" style="background:#d14b72;">remove</button>
 				</div>`
-				document.getElementById('my_store').appendChild(child);
+				let node = document.createTextNode(child);
+				document.getElementById('my_store').appendChild(node);
 			})
 			header.textContent = 'My products';
 		}

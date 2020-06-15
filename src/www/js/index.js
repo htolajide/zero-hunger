@@ -259,11 +259,10 @@ loadStore = () => {
 	document.getElementById('p_fullname').textContent = fullname;
 	document.getElementById('city').textContent = city;
 	const requestOptions = {
-		withCredentials: true,
   		headers: {
-			'Cookie': `farmerid=${sessionStorage.getItem('farmerid')}; token=${sessionStorage.getItem('token')}`,
-			'Content-type': 'application/x-www-form-urlencoded'
-		  }
+			Authorization: `Bearer ${'token'}`,
+			//'Content-type': 'application/x-www-form-urlencoded'
+		}
 	};
 	axios.get('https://zero-hunger.herokuapp.com/api/v1/farmer/products', requestOptions)
 	.then( response => {

@@ -275,12 +275,11 @@ loadStore = () => {
 	};
 	header.textContent = 'Loading products...';
 	// checking for cookies
-	console.log('cookies', document.cookie);
+	console.log('cookies', sessionStorage.getItem('token'));
 	axios.request(requestOptions)
 	.then( response => {
 		console.log('response', response.data.stock);
-		if(response.data.stock.length > 0){
-			p_box.removeChild(document.getElementsByClassName('content_box'));	
+		if(response.data.stock.length > 0){	
 			response.data.stock.map( product => {
 				const child = `<div class="content_box">
 				<img src="img/food/tomato.png" class="item_image">

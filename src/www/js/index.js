@@ -287,7 +287,7 @@ loadStore = () => {
 				<input type:"hidden" id:"p_id" value:"${product._id}" />
 				<button class="btn" onclick="" style="background:#d14b72;">remove</button>
 				</div>`
-				let node = document.createTextNode(child);
+				let node = document.createElement(child);
 				p_box.appendChild(node);
 			})
 			header.textContent = 'My products';

@@ -265,6 +265,7 @@ loadStore = () => {
 	document.getElementById('p_fullname').textContent = fullname;
 	document.getElementById('city').textContent = city;
 	const header = document.getElementById('store_header');
+	const p_box = document.getElementById('my_store');
 	const requestOptions = {
 		  url: 'https://zero-hunger.herokuapp.com/api/v1/farmer/products',
 		  method: 'get',
@@ -279,6 +280,7 @@ loadStore = () => {
 	.then( response => {
 		console.log('response', response.data.stock);
 		if(response.data.stock.length > 0){
+			p_box.removeChild(document.getElementsByClassName('content_box'));	
 			response.data.stock.map( product => {
 				const child = `<div class="content_box">
 				<img src="img/food/tomato.png" class="item_image">
@@ -287,7 +289,7 @@ loadStore = () => {
 				<button class="btn" onclick="" style="background:#d14b72;">remove</button>
 				</div>`
 				let node = document.createTextNode(child);
-				document.getElementById('my_store').appendChild(node);
+				p_box.appendChild(node);
 			})
 			header.textContent = 'My products';
 		}

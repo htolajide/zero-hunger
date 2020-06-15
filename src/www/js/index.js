@@ -194,7 +194,7 @@ login = () => {
 	}
 	const body = { email: email, password: password };
 	signin_btn.textContent = 'signing in...';
-	axios.post(url, body).then(response => {
+	axios.post(url, body, {credentials: 'include'}).then(response => {
 		const responseData = response.data;
 		if(responseData.status === 'Success') {
 			if (typeof(Storage) !== "undefined") {
@@ -237,9 +237,9 @@ register = () => {
 			if (typeof(Storage) !== "undefined") {
 				sessionStorage.setItem('token', responseData.token);
 				sessionStorage.setItem('farmerid', responseData.farmer_id);
-				sessionStorage.setItem('fullname', responseData.userData.fullname);
-				sessionStorage.setItem('email', responseData.userData.email);
-				sessionStorage.setItem('city', responseData.userData.city);
+				sessionStorage.setItem('fullname', responseData.userData[0].fullname);
+				sessionStorage.setItem('email', responseData.userData[0].email);
+				sessionStorage.setItem('city', responseData.userData[0].city);
 			} else {
 				alert('Sorry! No Web Storage support.');
 			}
@@ -258,9 +258,17 @@ loadStore = () => {
 	document.getElementById('p_email').textContent = email;
 	document.getElementById('p_fullname').textContent = fullname;
 	document.getElementById('city').textContent = city;
-	axios.get('https://zero-hunger.herokuapp.com/api/v1/farmer/products')
+	const requestOptions = {
+		withCredentials: true,
+  		headers: {
+			'Cookie': `farmerid=${sessionStorage.getItem('farmerid')}; token=${sessionStorage.getItem('token')}`,
+			'Content-type': 'application/x-www-form-urlencoded'
+		  }
+	};
+	axios.get('https://zero-hunger.herokuapp.com/api/v1/farmer/products', requestOptions)
 	.then( response => {
-		if(response.data.length > 0){
+		console.log('response', response);
+		if(response.length > 0){
 			response.data.map( product => {
 				const child = `<div class="content_box">
 				<img src="img/food/tomato.png" class="item_image">
@@ -268,7 +276,7 @@ loadStore = () => {
 				<input type:"hidden" id:"p_id" value:"${product._id}" />
 				<button class="btn" onclick="" style="background:#d14b72;">remove</button>
 				</div>`
-				document.getElementById('my_store').appendChild();
+				document.getElementById('my_store').appendChild(child);
 			})
 		}
 	})

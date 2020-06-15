@@ -207,9 +207,12 @@ login = () => {
 				alert('Sorry! No Web Storage support.');
 			}
 			openSellAfterSignin();
-			signin_btn.textContent = 'sign in';
+			signin_btn.textContent = 'Sign in';
 		};
-	}).catch(error => alert(`Login Failed: ${error}`))
+	}).catch(error => {
+		alert(`Login Failed: ${error}`);
+		signin_btn.textContent = 'Sign in';
+	})
 }
 var openSellAfterRegister;
 openSellAfterRegister = () =>
@@ -246,7 +249,10 @@ register = () => {
 			openSellAfterRegister();
 			register_btn.textContent = 'Register';
 		};
-	}).catch(error => alert(`Login Failed: ${error}`))
+	}).catch(error => {
+		alert(`Login Failed: ${error}`);
+		register_btn.textContent = 'Register';
+	})
 }
 var loadStore;
 loadStore = () => {
@@ -258,6 +264,7 @@ loadStore = () => {
 	document.getElementById('p_email').textContent = email;
 	document.getElementById('p_fullname').textContent = fullname;
 	document.getElementById('city').textContent = city;
+	const header = document.getElementById('store_header');
 	const requestOptions = {
 		  url: 'https://zero-hunger.herokuapp.com/api/v1/farmer/products',
 		  method: 'get',
@@ -265,12 +272,12 @@ loadStore = () => {
 			  Cookie: `farmerid=${sessionStorage.getItem('farmerid')}; token=${sessionStorage.getItem('token')}`
 		  }
 	};
-	
+	header.textContent = 'Loading products...';
 	axios.request(requestOptions)
 	.then( response => {
-		console.log('response', response);
-		if(response.length > 0){
-			response.data.map( product => {
+		console.log('response', response.data.stock);
+		if(response.data.stock.length > 0){
+			response.data.stock.map( product => {
 				const child = `<div class="content_box">
 				<img src="img/food/tomato.png" class="item_image">
 				<h2 class="title_small">${product.product_name}</h2>
@@ -279,6 +286,7 @@ loadStore = () => {
 				</div>`
 				document.getElementById('my_store').appendChild(child);
 			})
+			header.textContent = 'My products';
 		}
 	})
 	.catch(error => alert(error))

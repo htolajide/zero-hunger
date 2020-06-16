@@ -279,7 +279,7 @@ loadStore = () => {
 	axios.request(requestOptions)
 	.then( response => {
 		console.log('response', response.data.stock);
-		const content = '';
+		let content = '';
 		if(response.data.stock.length > 0){	
 			response.data.stock.map( product => {
 				const child = `<div class="content_box">

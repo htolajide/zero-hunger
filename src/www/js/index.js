@@ -275,7 +275,8 @@ loadStore = () => {
 	};
 	header.textContent = 'Loading products...';
 	// checking for cookies
-	console.log('cookies', sessionStorage.getItem('token'));
+	let cookies = document.cookie;
+	console.log('cookies', cookies);
 	axios.request(requestOptions)
 	.then( response => {
 		console.log('response', response.data.stock);

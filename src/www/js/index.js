@@ -264,7 +264,7 @@ loadStore = () => {
 	document.getElementById('p_fullname').textContent = fullname;
 	document.getElementById('city').textContent = city;
 	const header = document.getElementById('store_header');
-	const p_box = document.getElementById('my_store');
+	const p_box = document.getElementById('my_products');
 	const requestOptions = {
 		  url: 'https://zero-hunger.herokuapp.com/api/v1/farmer/products',
 		  method: 'get',

@@ -200,7 +200,7 @@ body {
 
 .content_box {
   width: 45vw;
-  height: 25vh;
+  min-height: 25vh;
   background: #fff;
   display: flex;
   justify-content: center;

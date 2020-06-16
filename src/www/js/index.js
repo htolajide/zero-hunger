@@ -279,16 +279,17 @@ loadStore = () => {
 	axios.request(requestOptions)
 	.then( response => {
 		console.log('response', response.data.stock);
-		if(response.data.stock.length > 0){	
-			response.data.stock.map( product => {
+		const { stock } = response.data;
+		p_box.removeChild(document.querySelector('.content_box'));
+		if(stock.length > 0){	
+			stock.map( product => {
 				const child = `<div class="content_box">
 				<img src="img/food/tomato.png" class="item_image">
 				<h2 class="title_small">${product.product_name}</h2>
 				<input type:"hidden" id:"p_id" value:"${product._id}" />
 				<button class="btn" onclick="" style="background:#d14b72;">remove</button>
-				</div>`
-				let node = document.createElement(child);
-				p_box.appendChild(node);
+				</div>`;
+				p_box.innerHTML += child;
 			})
 			header.textContent = 'My products';
 		}

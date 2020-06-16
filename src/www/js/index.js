@@ -281,17 +281,23 @@ loadStore = () => {
 	.then( response => {
 		console.log('response', response.data.stock);
 		const { stock } = response.data;
+		const content = '';
 		if(stock.length > 0){	
 			stock.map( product => {
 				const child = `<div class="content_box">
 				<img src="img/food/tomato.png" class="item_image">
 				<h2 class="title_small">${product.product_name}</h2>
-				<input type:"hidden" id:"p_id" value:"${product._id}" />
+				<h3 class="title_small">price &#8358;${product.price}</h3>
+				<h3 class="title_small">${product.quantity} ${product.unit}</h3>
+				<input type="hidden" id="p_id" value="${product._id}"/>
 				<button class="btn" onclick="" style="background:#d14b72;">remove</button>
 				</div>`;
-				p_box.innerHTML += child;
-			})
+				content += child;
+			});
+			p_box.innerHTML = content;
 			header.textContent = 'My products';
+		}else {
+			header.textContent = 'You have no product in store'
 		}
 	})
 	.catch(error => alert(error))

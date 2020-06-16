@@ -205,7 +205,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  flex-direction: column;
+  flex-direction: row;
   border-bottom: solid 0.5vw #eee;
   margin: 1vw;
   border-radius: 1vh;

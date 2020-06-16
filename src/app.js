@@ -31,11 +31,12 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(morgan('dev'));
+// setting up static page
+app.use(express.static(__dirname + '/www'));
 // setup the logger
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms', { stream: requestLogStream }));
 connectDB();
 routes(app);
-app.use(express.static(__dirname + '/www'));
 app.get('/welcome', (req, res) => { res.end('Zero Hunger Backend!!!'); });
 app.listen(port, () => logger.info(`Zero hunger ready at ${port}`));
 

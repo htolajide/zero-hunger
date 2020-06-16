@@ -1,4 +1,3 @@
- 
 var Team = {
     name:"Team-031",
     project:"Zero Hunger",
@@ -280,10 +279,9 @@ loadStore = () => {
 	axios.request(requestOptions)
 	.then( response => {
 		console.log('response', response.data.stock);
-		const { stock } = response.data;
 		const content = '';
-		if(stock.length > 0){	
-			stock.map( product => {
+		if(response.data.stock.length > 0){	
+			response.data.stock.map( product => {
 				const child = `<div class="content_box">
 				<img src="img/food/tomato.png" class="item_image">
 				<h2 class="title_small">${product.product_name}</h2>

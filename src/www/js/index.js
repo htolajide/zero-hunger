@@ -281,7 +281,6 @@ loadStore = () => {
 	.then( response => {
 		console.log('response', response.data.stock);
 		const { stock } = response.data;
-		p_box.removeChild(document.querySelector('.content_box'));
 		if(stock.length > 0){	
 			stock.map( product => {
 				const child = `<div class="content_box">

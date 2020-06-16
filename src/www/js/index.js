@@ -297,7 +297,7 @@ loadStore = () => {
 			p_box.innerHTML = content;
 			header.textContent = 'My products';
 		}else {
-			header.textContent = 'You have no product in store'
+			header.textContent = 'You have no product in store';
 		}
 	})
 	.catch(error => alert(error))

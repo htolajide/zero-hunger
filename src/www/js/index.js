@@ -31,7 +31,7 @@ nav=(x)=>
             document.getElementById("sell_section").style.display="flex";
             document.getElementById("my_store").style.display="none";
 			document.getElementById("more_selection").style.display="none";
-			loadSell();
+			loadSellProducts();
             break;
         case "Mystore":
 			if(isLoggedin()){
@@ -301,15 +301,17 @@ loadStore = () => {
 	})
 	.catch(error => alert('Error', error))
 }
-var loadSell;
-loadSell = () => {
+
+var loadSellProducts;
+loadSellProducts = () => {
 	const header = document.querySelector('#sell_header');
 	let content = ''
 	const container = document.getElementById('product_sell_list');
 	axios.get('https://zero-hunger.herokuapp.com/api/v1/products')
 	.then(response => {
+		console.log(response.data);
 		header.textContent = 'Loading Product...'
-		response.data.data.map(item =>{
+		response.data.map(item =>{
 			content += `
 			<div class="content_box_large">
 			<img src="img/food/tomato.png" class="item_image">
@@ -320,27 +322,35 @@ loadSell = () => {
 				<input  type="number" placeholder="50" value="50" readonly id="${item.name}_selling_price">
 				<img src="img/icons/sell.svg" onclick=increment("${item.name}_selling_price")>
 			</div>
-			<input type="text" class="input_" id="quantity" />
-			<select class="input_" id="unit"><option disabled selected>Select Unit</option> </select>
+			<div class="input_" >
+				<input type="number"  id="${item.name}_quantity placeholder="Quantity" />
+			</div>
+			<div class="input_">
+				<select class="unit" style="{ width: 100%; height:100%; border: no-border}" id="${item.name}_unit"><option disabled selected>Select Unit</option> </select>
+			</div>
 			<button class="btn_larger" onclick=openSignin() >Add to store</button>
 			</div>`;
 		})
 		container.innerHTML = content;
 	}
-	).catch(error => alert('Error: ', error))
-	const unit = document.getElementById('unit');
+	).catch(error => alert(error))
+	// preload unit select box
 	axios.get('https://zero-hunger.herokuapp.com/api/v1/units')
 	.then(
 		response => {
-			response.data.data.map( item => {
-				let option = document.createElement("option");
-          		let optiontext = document.createTextNode(item['name']);
-          		option.setAttribute("value", item['name']);
-          		option.appendChild(optiontext);
-          		unit.appendChild(option);
-			});
+			const unit = document.querySelectorAll('.unit');
+			console.log(unit);
+			for (let i=0; i<unit.length; i++){
+				response.data.map( item => {
+					let option = document.createElement("option");
+					let optiontext = document.createTextNode(item['name']);
+					option.setAttribute("value", item['name']);
+					option.appendChild(optiontext);
+					unit[i].appendChild(option);
+				});
+			}
 			header.textContent = 'Avaliable products';
 		}
-	).catch(error => alert('Error: ', error));
+	).catch(error => alert(error));
 }
 //add new fuctions / features.

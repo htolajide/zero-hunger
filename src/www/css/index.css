@@ -213,7 +213,7 @@ body {
 
 .content_box_large {
   width: 98vw;
-  height: 40vh;
+  min-height: 40vh;
   background: #fff;
   display: flex;
   justify-content: center;

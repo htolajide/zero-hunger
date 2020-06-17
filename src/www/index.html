@@ -218,18 +218,19 @@
             </div>
             <!-- sell page -->
             <div class="content_list_column" id="sell_section" style="display:none;">
-                <h1 class="title_bright">Avaliable products</h1>
+                <h1 class="title_bright" id="sell_header">Avaliable products</h1>
                 <div class="content_list" id="product_sell_list" >
                     <div class="content_box_large">
                         <img src="img/food/tomato.png" class="item_image">
                         <h2 class="title_small">Tomatoes</h2>
                         <p class="sub_title">recomended price &#8358;50</p>
-                        
                         <div class="input_">
                             <img src="img/icons/remove.svg" onclick=decrement("tomatoes_selling_price")>
                             <input  type="number" placeholder="50" value="50" readonly id="tomatoes_selling_price">
                             <img src="img/icons/sell.svg" onclick=increment("tomatoes_selling_price")>
                         </div>
+                        <input type="text" class="input_" id="quantity" />
+                        <select class="input_" id="unit"><option disabled selected>Select Unit</option> </select>
                         <button class="btn_larger" onclick=openSignin() >Add to store</button>
                     </div>
                     <div class="content_box_large">
@@ -287,40 +288,7 @@
                 </div>
                 <h1 class="title_bright" id="store_header">My Products</h1>
                 <div class="content_list" id="my_products" >
-                    <!-- place holder for store products
-                    <div class="content_box">
-                        <img src="img/food/tomato.png" class="item_image">
-                        <h2 class="title_small">Tomatoes</h2>
-                        <button class="btn" onclick="" style="background:#d14b72;">remove</button>
-                    </div>
-                    <div class="content_box">
-                        <img src="img/food/pepper.png" class="item_image">
-                        <h2 class="title_small">Pepper</h2>
-                        <button class="btn" onclick="" style="background:#d14b72;">remove</button>
-                    </div>
-                    <div class="content_box">
-                        <img src="img/food/tomato.png" class="item_image">
-                        <h2 class="title_small">Tomatoes</h2>
-                        <button class="btn" onclick="" style="background:#d14b72;">remove</button>
-                    </div>
-                    <div class="content_box">
-                        <img src="img/food/pepper.png" class="item_image">
-                        <h2 class="title_small">Pepper</h2>
-                        <button class="btn" onclick="" style="background:#d14b72;">remove</button>
-                    </div>
-                    <div class="content_box">
-                        <img src="img/food/tomato.png" class="item_image">
-                        <h2 class="title_small">Tomatoes</h2>
-                        <button class="btn" onclick="" style="background:#d14b72;">remove</button>
-                    </div>
-                    <div class="content_box">
-                        <img src="img/food/pepper.png" class="item_image">
-                        <h2 class="title_small">Pepper</h2>
-                        <button class="btn" onclick="" style="background:#d14b72;">remove</button>
-                    </div>
-                    -->
                 </div>
-                
             </div>
             <div class="content_list_column" id="more_selection" style="display:none;"> 
                 <h1 class="title_bright">More</h1>

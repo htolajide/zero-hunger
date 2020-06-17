@@ -30,7 +30,8 @@ nav=(x)=>
             document.getElementById("product_selection").style.display="none";
             document.getElementById("sell_section").style.display="flex";
             document.getElementById("my_store").style.display="none";
-            document.getElementById("more_selection").style.display="none";
+			document.getElementById("more_selection").style.display="none";
+			loadSell();
             break;
         case "Mystore":
 			if(isLoggedin()){
@@ -298,6 +299,48 @@ loadStore = () => {
 			header.textContent = 'You have no product in store';
 		}
 	})
-	.catch(error => alert(error))
+	.catch(error => alert('Error', error))
+}
+var loadSell;
+loadSell = () => {
+	const header = document.querySelector('#sell_header');
+	let content = ''
+	const container = document.getElementById('product_sell_list');
+	axios.get('https://zero-hunger.herokuapp.com/api/v1/products')
+	.then(response => {
+		header.textContent = 'Loading Product...'
+		response.data.data.map(item =>{
+			content += `
+			<div class="content_box_large">
+			<img src="img/food/tomato.png" class="item_image">
+			<h2 class="title_small">${item.name}</h2>
+			<p class="sub_title">recomended price &#8358;50</p>
+			<div class="input_">
+				<img src="img/icons/remove.svg" onclick=decrement("${item.name}_selling_price")>
+				<input  type="number" placeholder="50" value="50" readonly id="${item.name}_selling_price">
+				<img src="img/icons/sell.svg" onclick=increment("${item.name}_selling_price")>
+			</div>
+			<input type="text" class="input_" id="quantity" />
+			<select class="input_" id="unit"><option disabled selected>Select Unit</option> </select>
+			<button class="btn_larger" onclick=openSignin() >Add to store</button>
+			</div>`;
+		})
+		container.innerHTML = content;
+	}
+	).catch(error => alert('Error: ', error))
+	const unit = document.getElementById('unit');
+	axios.get('https://zero-hunger.herokuapp.com/api/v1/units')
+	.then(
+		response => {
+			response.data.data.map( item => {
+				let option = document.createElement("option");
+          		let optiontext = document.createTextNode(item['name']);
+          		option.setAttribute("value", item['name']);
+          		option.appendChild(optiontext);
+          		unit.appendChild(option);
+			});
+			header.textContent = 'Avaliable products';
+		}
+	).catch(error => alert('Error: ', error));
 }
 //add new fuctions / features.

@@ -273,10 +273,9 @@ loadStore = () => {
 			  Cookie: `farmerid=${sessionStorage.getItem('farmerid')}; token=${sessionStorage.getItem('token')}`
 		  }
 	};
-	header.textContent = 'Loading products...';
+	header.textContent = 'Loading products...'
 	// checking for cookies
-	let cookies = document.cookie;
-	console.log('cookies', cookies);
+	console.log('cookies', document.cookie);
 	axios.request(requestOptions)
 	.then( response => {
 		console.log('response', response.data.stock);
@@ -299,7 +298,7 @@ loadStore = () => {
 			header.textContent = 'You have no product in store';
 		}
 	})
-	.catch(error => alert('Error', error))
+	.catch(error => alert(error))
 }
 
 var loadSellProducts;
@@ -309,26 +308,27 @@ loadSellProducts = () => {
 	const container = document.getElementById('product_sell_list');
 	axios.get('https://zero-hunger.herokuapp.com/api/v1/products')
 	.then(response => {
-		console.log(response.data);
 		header.textContent = 'Loading Product...'
 		response.data.map(item =>{
+			if (item.name.split(' ').length > 1) item.name.split(' ').join('');
 			content += `
 			<div class="content_box_large">
 			<img src="img/food/tomato.png" class="item_image">
-			<h2 class="title_small">${item.name}</h2>
+			<h2 class="title_small" id="${item.name}">${item.name}</h2>
 			<p class="sub_title">recomended price &#8358;50</p>
 			<div class="input_">
 				<img src="img/icons/remove.svg" onclick=decrement("${item.name}_selling_price")>
 				<input  type="number" placeholder="50" value="50" readonly id="${item.name}_selling_price">
 				<img src="img/icons/sell.svg" onclick=increment("${item.name}_selling_price")>
 			</div>
+			<p class="sub_title">Quantity</p>
 			<div class="input_" >
 				<input type="number"  id="${item.name}_quantity placeholder="Quantity" />
 			</div>
 			<div class="input_">
 				<select class="unit" style="{ width: 100%; height:100%; border: no-border}" id="${item.name}_unit"><option disabled selected>Select Unit</option> </select>
 			</div>
-			<button class="btn_larger" onclick=openSignin() >Add to store</button>
+			<button class="btn_larger" id="${item.name}_btn" onclick=addStore() >Add to store</button>
 			</div>`;
 		})
 		container.innerHTML = content;
@@ -339,7 +339,6 @@ loadSellProducts = () => {
 	.then(
 		response => {
 			const unit = document.querySelectorAll('.unit');
-			console.log(unit);
 			for (let i=0; i<unit.length; i++){
 				response.data.map( item => {
 					let option = document.createElement("option");
@@ -352,5 +351,94 @@ loadSellProducts = () => {
 			header.textContent = 'Avaliable products';
 		}
 	).catch(error => alert(error));
+}
+var addStore;
+addStore = () => {
+	// here am getting all availabe products and check to either update or add it to farner store
+	const requestOptions = {
+		url: 'https://zero-hunger.herokuapp.com/api/v1/farmer/products',
+		method: 'get',
+		headers: {
+			Cookie: `farmerid=${sessionStorage.getItem('farmerid')}; token=${sessionStorage.getItem('token')}`
+		}
+  	};
+	axios.get('https://zero-hunger.herokuapp.com/api/v1/products').then(
+		result => {
+			result.data.map( item => {
+				const product_name = document.getElementById(`${item.name}`).textContent;
+				const submit_btn = document.getElementById(`${item.name}_btn`);
+				if(item.name === product_name){
+					submit_btn.textContent = 'processing...';
+					const price = document.getElementById(`${item.name}_selling_price`).value;
+					const quantity = document.getElementById(`${item.name}_quantity`).value;
+					const unit = document.getElementById(`${item.name}_unit`).value
+					const postOptions = {
+						url: 'https://zero-hunger.herokuapp.com/api/v1/farmer/product/add',
+						method: 'post',
+						data: { name: product_name, price: price, quantity: quantity, unit: unit},
+						headers: { Cookie: `farmerid = ${sessionStorage.getItem('farmerid')} `}
+					}
+					axios.request(requestOptions)
+  					.then( response => {
+							if (response.data.stock.length > 0) {
+								response.data.stock.map( product => {
+									if(item.name === product.name){	
+										const id = product._id
+										const patchOptions = {
+											url: `https://zero-hunger.herokuapp.com/api/v1/farmer/product/edit`,
+											method: 'patch',
+											data: { name: product_name, price: price, quantity: quantity, unit: unit},
+											headers: { Cookie: `farmerid = ${sessionStorage.getItem('farmerid')} `}
+										}
+										axios.request(patchOptions).then(
+											feedback => {
+												console.log('Patch Meassge', feedback.date);
+												submit_btn.textContent = 'Add to store';
+											}
+										)
+									}else {
+										axios.request(postOptions).then( feedback => {
+											console.log("Post message",feedback);
+											submit_btn.textContent = 'Add to store';
+										})
+									}
+								})
+							} else {
+								axios.request(postOptions).then( feedback => {
+									console.log("Post message",feedback);
+									submit_btn.textContent = 'Add to store';
+								})
+							}
+						}
+					)
+				}
+			})
+						
+		}
+	).catch(error => alert('Error: ' + error))
+
+  axios.request(requestOptions)
+  .then( response => {
+	  console.log('response', response.data.stock);
+	  let content = '';
+	  if(response.data.stock.length > 0){	
+		  response.data.stock.map( product => {
+			  const child = `<div class="content_box">
+			  <img src="img/food/tomato.png" class="item_image">
+			  <h2 class="title_small">${product.product_name}</h2>
+			  <h3 class="sub_title">price &#8358;${product.price}</h3>
+			  <h3 class="sub_title">${product.quantity} ${product.unit}</h3>
+			  <input type="hidden" id="p_id" value="${product._id}"/>
+			  <button class="btn" onclick="" style="background:#d14b72;">remove</button>
+			  </div>`;
+			  content += child;
+		  });
+		  p_box.innerHTML = content;
+		  header.textContent = 'My products';
+	  }else {
+		  header.textContent = 'You have no product in store';
+	  }
+  })
+  .catch(error => alert(error))
 }
 //add new fuctions / features.

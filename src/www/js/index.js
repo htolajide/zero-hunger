@@ -415,30 +415,6 @@ addStore = () => {
 			})
 						
 		}
-	).catch(error => alert('Error: ' + error))
-
-  axios.request(requestOptions)
-  .then( response => {
-	  console.log('response', response.data.stock);
-	  let content = '';
-	  if(response.data.stock.length > 0){	
-		  response.data.stock.map( product => {
-			  const child = `<div class="content_box">
-			  <img src="img/food/tomato.png" class="item_image">
-			  <h2 class="title_small">${product.product_name}</h2>
-			  <h3 class="sub_title">price &#8358;${product.price}</h3>
-			  <h3 class="sub_title">${product.quantity} ${product.unit}</h3>
-			  <input type="hidden" id="p_id" value="${product._id}"/>
-			  <button class="btn" onclick="" style="background:#d14b72;">remove</button>
-			  </div>`;
-			  content += child;
-		  });
-		  p_box.innerHTML = content;
-		  header.textContent = 'My products';
-	  }else {
-		  header.textContent = 'You have no product in store';
-	  }
-  })
-  .catch(error => alert(error))
+	).catch(error => alert('Error: ' + error)) 
 }
 //add new fuctions / features.

@@ -306,29 +306,29 @@ loadSellProducts = () => {
 	const header = document.querySelector('#sell_header');
 	let content = ''
 	const container = document.getElementById('product_sell_list');
+	header.textContent = 'Loading Product...';
 	axios.get('https://zero-hunger.herokuapp.com/api/v1/products')
 	.then(response => {
-		header.textContent = 'Loading Product...'
 		response.data.map(item =>{
-			if (item.name.split(' ').length > 1) item.name.split(' ').join('');
+			tempName = item.name.replace(' ','').toLowerCase();
 			content += `
 			<div class="content_box_large">
 			<img src="img/food/tomato.png" class="item_image">
-			<h2 class="title_small" id="${item.name}">${item.name}</h2>
+			<h2 class="title_small" id="${tempName}">${item.name}</h2>
 			<p class="sub_title">recomended price &#8358;50</p>
 			<div class="input_">
-				<img src="img/icons/remove.svg" onclick=decrement("${item.name}_selling_price")>
-				<input  type="number" placeholder="50" value="50" readonly id="${item.name}_selling_price">
-				<img src="img/icons/sell.svg" onclick=increment("${item.name}_selling_price")>
+				<img src="img/icons/remove.svg" onclick=decrement("${tempName}_selling_price")>
+				<input  type="number" placeholder="50" value="50" id="${tempName}_selling_price">
+				<img src="img/icons/sell.svg" onclick=increment("${tempName}_selling_price")>
 			</div>
 			<p class="sub_title">Quantity</p>
 			<div class="input_" >
-				<input type="number"  id="${item.name}_quantity placeholder="Quantity" />
+				<input type="number"  id="${tempName}_quantity" placeholder="Quantity" />
 			</div>
 			<div class="input_">
-				<select class="unit" style="{ width: 100%; height:100%; border: no-border}" id="${item.name}_unit"><option disabled selected>Select Unit</option> </select>
+				<select class="unit" style="{ width: 100%; height:100%; border: no-border}" id="${tempName}_unit"><option disabled selected>Select Unit</option> </select>
 			</div>
-			<button class="btn_larger" id="${item.name}_btn" onclick=addStore() >Add to store</button>
+			<button class="btn_larger" id="${tempName}_btn" onclick=addStore(event) >Add to store</button>
 			</div>`;
 		})
 		container.innerHTML = content;
@@ -353,7 +353,17 @@ loadSellProducts = () => {
 	).catch(error => alert(error));
 }
 var addStore;
-addStore = () => {
+addStore = (event) => {
+	const elementId = event.target.id;
+	const submit_btn = document.getElementById(`${elementId}`);
+	submit_btn.textContent = 'processing...';
+	const productName = elementId.split('_')[0];
+	console.log(productName);
+	const item_name = document.getElementById(`${productName}`).textContent;
+	const price = document.getElementById(`${productName}_selling_price`).value;
+	const quantity = document.getElementById(`${productName}_quantity`).value;
+	const unit = document.getElementById(`${productName}_unit`).value;
+	
 	// here am getting all availabe products and check to either update or add it to farner store
 	const requestOptions = {
 		url: 'https://zero-hunger.herokuapp.com/api/v1/farmer/products',
@@ -361,60 +371,51 @@ addStore = () => {
 		headers: {
 			Cookie: `farmerid=${sessionStorage.getItem('farmerid')}; token=${sessionStorage.getItem('token')}`
 		}
-  	};
-	axios.get('https://zero-hunger.herokuapp.com/api/v1/products').then(
-		result => {
-			result.data.map( item => {
-				const product_name = document.getElementById(`${item.name}`).textContent;
-				const submit_btn = document.getElementById(`${item.name}_btn`);
-				if(item.name === product_name){
-					submit_btn.textContent = 'processing...';
-					const price = document.getElementById(`${item.name}_selling_price`).value;
-					const quantity = document.getElementById(`${item.name}_quantity`).value;
-					const unit = document.getElementById(`${item.name}_unit`).value
-					const postOptions = {
-						url: 'https://zero-hunger.herokuapp.com/api/v1/farmer/product/add',
-						method: 'post',
-						data: { name: product_name, price: price, quantity: quantity, unit: unit},
+	  };
+	  const postOptions = {
+		url: 'https://zero-hunger.herokuapp.com/api/v1/farmer/product/add',
+		method: 'post',
+		data: { name: item_name, price: price, quantity: quantity, unit: unit},
+		headers: { Cookie: `farmerid = ${sessionStorage.getItem('farmerid')} `}
+	}  
+	axios.request(requestOptions)
+  	.then( response => {
+		if (response.data.stock.length > 0) {
+			response.data.stock.map( product => {
+				if(item_name === product.name){	
+					const id = product._id;
+					const patchOptions = {
+						url: `https://zero-hunger.herokuapp.com/api/v1/farmer/product/${id}/edit`,
+						method: 'patch',
+						data: { name: item_name, price: price, quantity: quantity, unit: unit},
 						headers: { Cookie: `farmerid = ${sessionStorage.getItem('farmerid')} `}
 					}
-					axios.request(requestOptions)
-  					.then( response => {
-							if (response.data.stock.length > 0) {
-								response.data.stock.map( product => {
-									if(item.name === product.name){	
-										const id = product._id
-										const patchOptions = {
-											url: `https://zero-hunger.herokuapp.com/api/v1/farmer/product/edit`,
-											method: 'patch',
-											data: { name: product_name, price: price, quantity: quantity, unit: unit},
-											headers: { Cookie: `farmerid = ${sessionStorage.getItem('farmerid')} `}
-										}
-										axios.request(patchOptions).then(
-											feedback => {
-												console.log('Patch Meassge', feedback.date);
-												submit_btn.textContent = 'Add to store';
-											}
-										)
-									}else {
-										axios.request(postOptions).then( feedback => {
-											console.log("Post message",feedback);
-											submit_btn.textContent = 'Add to store';
-										})
-									}
-								})
-							} else {
-								axios.request(postOptions).then( feedback => {
-									console.log("Post message",feedback);
-									submit_btn.textContent = 'Add to store';
-								})
-							}
+					axios.request(patchOptions).then(
+						feedback => {
+							console.log('Patch Meassge', feedback.data);
+							submit_btn.textContent = 'Add to store';
+							alert('Product succefully added');
 						}
 					)
+				}else {
+					axios.request(postOptions).then( 
+						feedback => {
+							console.log("Post message",feedback.data);
+							submit_btn.textContent = 'Add to store';
+							alert('Product succefully added');
+					})
 				}
 			})
-						
+		} else {
+			axios.request(postOptions).then( 
+				feedback => {
+					console.log("Post message",feedback);
+					submit_btn.textContent = 'Add to store';
+					alert('Product succefully added');
+				}
+			)
 		}
-	).catch(error => alert('Error: ' + error)) 
+	}
+	).catch(error => alert('Error: ' + error)) ;
 }
 //add new fuctions / features.

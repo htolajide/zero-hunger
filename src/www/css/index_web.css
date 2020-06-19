@@ -419,7 +419,7 @@ body {
   margin-top: -0.5vw;
 }
 
-.input_ input {
+.input_ input, .input_ select {
   outline: none;
   border: none;
   font-size: 1vw;

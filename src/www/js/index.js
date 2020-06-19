@@ -358,12 +358,10 @@ addStore = (event) => {
 	const submit_btn = document.getElementById(`${elementId}`);
 	submit_btn.textContent = 'processing...';
 	const productName = elementId.split('_')[0];
-	console.log(productName);
 	const item_name = document.getElementById(`${productName}`).textContent;
 	const price = document.getElementById(`${productName}_selling_price`).value;
 	const quantity = document.getElementById(`${productName}_quantity`).value;
 	const unit = document.getElementById(`${productName}_unit`).value;
-	
 	// here am getting all availabe products and check to either update or add it to farner store
 	const requestOptions = {
 		url: 'https://zero-hunger.herokuapp.com/api/v1/farmer/products',
@@ -383,6 +381,7 @@ addStore = (event) => {
 		if (response.data.stock.length > 0) {
 			response.data.stock.map( product => {
 				if(item_name === product.name){	
+					console.log('edit')
 					const id = product._id;
 					const patchOptions = {
 						url: `https://zero-hunger.herokuapp.com/api/v1/farmer/product/${id}/edit`,

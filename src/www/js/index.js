@@ -381,7 +381,7 @@ addStore = (event) => {
   	.then( response => {
 		if (response.data.stock.length > 0) {
 			response.data.stock.map( product => {
-				if(item_name === product.name){	
+				if(product.name === item_name){	
 					console.log('edit')
 					const id = product._id;
 					const patchOptions = {

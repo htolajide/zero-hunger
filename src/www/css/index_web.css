@@ -422,7 +422,7 @@ body {
 .input_ input, .input_ select {
   outline: none;
   border: none;
-  font-size: 1vw;
+  font-size: 3vw;
   text-align: center;
   width: 20vw;
 }

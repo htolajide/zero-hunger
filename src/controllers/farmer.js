@@ -237,8 +237,18 @@ export default{
   },
   editProduct: (req, res) => {
     const name = req.body.name, unit = req.body.unit, quantity = 
-    req.body.quantity, price = req.body.price;
-    const farmerid = req.cookies.farmerid;
+    req.body.quantity, price = req.body.price, farmerid = 
+    req.cookies.farmerid, old_quantity = 0;
+    // get old quantity
+    FarmerStock.findOne({farmer_id: req.cookies.farmerid, product_name: name}).then(
+        stock => {
+            old_quantity = stock.quantity
+        }
+    )
+    .catch(error => res.status(400).json({
+        status:'failed', message: error.message
+      })
+    )
     axios.get(location.url).then(
         result => {
             const stock = new FarmerStock({
@@ -246,7 +256,7 @@ export default{
                 farmer_id: farmerid,
                 product_name: name,
                 unit: unit,
-                quantity: quantity,
+                quantity: quantity + old_quantity,
                 price: price,
                 location: result.data.city,
                 updated_at: new Date()

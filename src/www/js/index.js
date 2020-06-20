@@ -375,7 +375,8 @@ addStore = (event) => {
 		method: 'post',
 		data: { name: item_name, price: price, quantity: quantity, unit: unit},
 		headers: { Cookie: `farmerid = ${sessionStorage.getItem('farmerid')} `}
-	}  
+	} 
+	
 	axios.request(requestOptions)
   	.then( response => {
 		if (response.data.stock.length > 0) {
@@ -395,26 +396,20 @@ addStore = (event) => {
 							submit_btn.textContent = 'Add to store';
 							alert('Product succefully added');
 						}
-					)
-				}else {
-					axios.request(postOptions).then( 
-						feedback => {
-							console.log("Post message",feedback.data);
-							submit_btn.textContent = 'Add to store';
-							alert('Product succefully added');
-					})
+					).catch(error => alert(`Error: ${error}`))
+					return;
 				}
 			})
-		} else {
-			axios.request(postOptions).then( 
-				feedback => {
-					console.log("Post message",feedback);
-					submit_btn.textContent = 'Add to store';
-					alert('Product succefully added');
-				}
-			)
-		}
+		} 
 	}
-	).catch(error => alert('Error: ' + error)) ;
+	).catch(error => alert('Error: ' + error));
+	// post new data to stock, this will throw error if item already exists
+	axios.request(postOptions).then( 
+		feedback => {
+			console.log("Post message",feedback);
+			submit_btn.textContent = 'Add to store';
+			alert('Product succefully added');
+		}
+	).catch(error => alert(`Error: ${error}`));
 }
 //add new fuctions / features.

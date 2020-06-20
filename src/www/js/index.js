@@ -246,6 +246,7 @@ register = () => {
 			} else {
 				alert('Sorry! No Web Storage support.');
 			}
+			alert('Registration Successful');
 			openSellAfterRegister();
 			register_btn.textContent = 'Register';
 		};
@@ -379,10 +380,11 @@ addStore = (event) => {
 	
 	axios.request(requestOptions)
   	.then( response => {
+		console.log('edit 1')
 		if (response.data.stock.length > 0) {
 			response.data.stock.map( product => {
 				if(product.name === item_name){	
-					console.log('edit')
+					console.log('edit 2')
 					const id = product._id;
 					const patchOptions = {
 						url: `https://zero-hunger.herokuapp.com/api/v1/farmer/product/${id}/edit`,
@@ -392,6 +394,7 @@ addStore = (event) => {
 					}
 					axios.request(patchOptions).then(
 						feedback => {
+							console.log('edit 3')
 							console.log('Patch Meassge', feedback.data);
 							submit_btn.textContent = 'Add to store';
 							alert('Product succefully added');

@@ -48,7 +48,6 @@ nav=(x)=>
 			}else openSignin()
             break;
         case "more":
-
             document.getElementById("buy_nav").style.borderBottom = "solid 0vh #73d14b";
             document.getElementById("sell_nav").style.borderBottom = "solid 0vh #73d14b";
             document.getElementById("Mystore_nav").style.borderBottom = "solid 0vh #73d14b";
@@ -217,8 +216,8 @@ login = () => {
 var openSellAfterRegister;
 openSellAfterRegister = () =>
 {
-	//closes signin screen
-	document.getElementById("register_page").style.marginLeft="-100vw";
+	//closes register screen
+	document.getElementById("register_page").style.marginLeft="100vw";
 	//closee index screen
 	document.getElementById("index_page").style.marginLeft="-100vw";
 	nav("sell");
@@ -239,16 +238,16 @@ register = () => {
 		if(responseData.status === 'Success') {
 			if (typeof(Storage) !== "undefined") {
 				sessionStorage.setItem('token', responseData.token);
-				sessionStorage.setItem('farmerid', responseData.farmer_id);
-				sessionStorage.setItem('fullname', responseData.userData[0].fullname);
-				sessionStorage.setItem('email', responseData.userData[0].email);
-				sessionStorage.setItem('city', responseData.userData[0].city);
+				sessionStorage.setItem('farmerid', responseData.userData._id);
+				sessionStorage.setItem('fullname', responseData.userData.fullname);
+				sessionStorage.setItem('email', responseData.userData.email);
+				sessionStorage.setItem('city', responseData.userData.city);
 			} else {
 				alert('Sorry! No Web Storage support.');
 			}
 			alert('Registration Successful');
-			openSellAfterRegister();
 			register_btn.textContent = 'Register';
+			openSellAfterRegister();
 		};
 	}).catch(error => {
 		alert(`Login Failed: ${error}`);
@@ -382,9 +381,10 @@ addStore = (event) => {
   	.then( response => {
 		console.log('edit 1')
 		if (response.data.stock.length > 0) {
+			console.log('edit 2');
 			response.data.stock.map( product => {
 				if(product.name === item_name){	
-					console.log('edit 2')
+					console.log('edit 2');
 					const id = product._id;
 					const patchOptions = {
 						url: `https://zero-hunger.herokuapp.com/api/v1/farmer/product/${id}/edit`,

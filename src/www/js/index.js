@@ -374,7 +374,7 @@ addStore = (event) => {
 		url: 'https://zero-hunger.herokuapp.com/api/v1/farmer/product/add',
 		method: 'post',
 		data: { name: item_name, price: price, quantity: quantity, unit: unit},
-		headers: { Cookie: `farmerid = ${sessionStorage.getItem('farmerid')} `}
+		headers: { Cookie: `farmerid = ${sessionStorage.getItem('farmerid')}; token=${sessionStorage.getItem('token')}`}
 	} 
 	
 	axios.request(requestOptions)
@@ -388,7 +388,7 @@ addStore = (event) => {
 						url: `https://zero-hunger.herokuapp.com/api/v1/farmer/product/${id}/edit`,
 						method: 'patch',
 						data: { name: item_name, price: price, quantity: quantity, unit: unit},
-						headers: { Cookie: `farmerid = ${sessionStorage.getItem('farmerid')} `}
+						headers: { Cookie: `farmerid = ${sessionStorage.getItem('farmerid')}; token=${sessionStorage.getItem('token')}` }
 					}
 					axios.request(patchOptions).then(
 						feedback => {

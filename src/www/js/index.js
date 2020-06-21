@@ -438,27 +438,27 @@ openUpdatePage=(event)=>
 	const content = `
 	<div class="content_box_large">
 	<img src="img/food/tomato.png" class="item_image">
-	<h2 class="title_small" id="${lower_name}">${name}</h2>
+	<h2 class="title_small" id="${input_name}">${name}</h2>
 	<p class="sub_title">recomended price &#8358;50</p>
 	<div class="input_">
-		<img src="img/icons/remove.svg" onclick=decrement("${lower_name}_selling_price")>
-		<input  type="number" placeholder="50" value="50" id="${lower_name}_selling_price">
-		<img src="img/icons/sell.svg" onclick=increment("${lower_name}_selling_price")>
+		<img src="img/icons/remove.svg" onclick=decrement("${input_name}_selling_price")>
+		<input  type="number" placeholder="50" value="50" id="${input_name}_selling_price">
+		<img src="img/icons/sell.svg" onclick=increment("${input_name}_selling_price")>
 	</div>
 	<p class="sub_title">Quantity</p>
 	<div class="input_" >
-		<input type="number"  id="${lower_name}_quantity" placeholder="Quantity value= ${quantity}" />
+		<input type="number"  id="${input_name}_quantity" placeholder="Quantity value= ${quantity}" />
 	</div>
 	<div class="input_">
-		<select class="unit" style="{ width: 100%; height:100%; border: no-border}" id="${lower_name}_unit"><option selected>${unit}</option> </select>
+		<select class="unit" style="{ width: 100%; height:100%; border: no-border}" id="${input_name}_unit"><option selected>${unit}</option> </select>
 	</div>
-	<button class="btn_larger" id="${lower_name}_btn" onclick=updateProduct(event) >Update</button>
+	<button class="btn_larger" id="${input_name}_btn" onclick=closeUpdatePage(event) >Update</button>
 	</div>`;
 	container.innerHTML = content;
 	document.getElementById("update_product").style.marginLeft="0vw";
 }
 var closeUpdatePage;
-closeUpdatePage=()=>
+closeUpdatePage=(event)=>
 {
 	//close update screen
 	document.getElementById("update_product").style.marginLeft="100vw";

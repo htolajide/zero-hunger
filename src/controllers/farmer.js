@@ -269,7 +269,7 @@ export default{
                 });
             })
             .catch(error => res.status(400).json({
-                status: 'failed', message: error.message})
+                status: 'failed', message: error})
             )
         }   
     )

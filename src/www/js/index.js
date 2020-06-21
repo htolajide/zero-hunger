@@ -386,8 +386,10 @@ addStore = (event) => {
 					const patchOptions = {
 						url: `https://zero-hunger.herokuapp.com/api/v1/farmer/product/${id}/edit`,
 						method: 'patch',
-						body: { name: item_name, price: price, quantity: quantity, unit: unit },
-						headers: { Cookie: `farmerid = ${sessionStorage.getItem('farmerid')}; token=${sessionStorage.getItem('token')}` }
+						data: { name: item_name, price: price, quantity: quantity, unit: unit },
+						headers: { 
+							'Content-Type': 'application/x-www-form-urlencoded',
+							Cookie: `farmerid = ${sessionStorage.getItem('farmerid')}; token=${sessionStorage.getItem('token')}` }
 					}
 					axios.request(patchOptions).then(
 						feedback => {

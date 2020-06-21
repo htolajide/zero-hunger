@@ -281,13 +281,14 @@ loadStore = () => {
 		let content = '';
 		if(response.data.stock.length > 0){	
 			response.data.stock.map( product => {
+				const lower_name = product.product_name.split(' ').join('').toLowerCase();
 				const child = `<div class="content_box">
 				<img src="img/food/tomato.png" class="item_image">
-				<h2 class="title_small">${product.product_name}</h2>
-				<h3 class="sub_title">price &#8358;${product.price}</h3>
-				<h3 class="sub_title">${product.quantity} ${product.unit}</h3>
-				<input type="hidden" id="p_id" value="${product._id}"/>
-				<button class="btn" onclick="" style="background:#d14b72;">remove</button>
+				<h2 class="title_small" id="${lowername}_name">${product.product_name}</h2>
+				<h3 class="sub_title" id="${lowername}_price">price &#8358;${product.price}</h3>
+				<h3 class="sub_title" id="${lowername}_qty_unit">${product.quantity} ${product.unit}</h3>
+				<input type="hidden" id="${lower_name}_input" value="${product._id}"/>
+				<button class="btn" id="${lower_name}_id" onclick=openUpdatePage(event) style="background:#d14b72;">update</button>
 				</div>`;
 				content += child;
 			});
@@ -372,7 +373,7 @@ addStore = (event) => {
 	  const postOptions = {
 		url: 'https://zero-hunger.herokuapp.com/api/v1/farmer/product/add',
 		method: 'post',
-		data: { name: item_name, price: price, quantity: quantity, unit: unit},
+		data: { name: item_name, price: price, quantity: quantity, unit: unit },
 		headers: { Cookie: `farmerid = ${sessionStorage.getItem('farmerid')}; token=${sessionStorage.getItem('token')}`}
 	} 
 	
@@ -388,7 +389,7 @@ addStore = (event) => {
 						method: 'patch',
 						data: { name: item_name, price: price, quantity: quantity, unit: unit },
 						headers: { 
-							Cookie: `farmerid = ${sessionStorage.getItem('farmerid')}; token=${sessionStorage.getItem('token')}`
+							cookies: `farmerid = ${sessionStorage.getItem('farmerid')}; token=${sessionStorage.getItem('token')}`
 						}
 					}
 					axios.request(patchOptions).then(
@@ -422,5 +423,44 @@ addStore = (event) => {
 		alert('Error: ' + error);
 		submit_btn.textContent = 'Add to store';
 	});
+}
+var openUpdatePage;
+openUpdatePage=(event)=>
+{
+	//open update screen
+	const input_name = event.target.id.split('_')[0];
+	const id = document.getElementById(`${input_name}_input`).value;
+	const name = document.getElementById(`${input_name}_name`).textContent;
+	const price = document.getElementById(`${input_name}_price`).textContent;
+	const quantity = document.getElementById(`${input_name}_qty_unit`).textContent.split(' ')[0];
+	const unit = document.getElementById(`${input_name}_qty_unit`).textContent.split(' ')[1]
+	const container = document.getElementById(`product_update_form`)
+	const content = `
+	<div class="content_box_large">
+	<img src="img/food/tomato.png" class="item_image">
+	<h2 class="title_small" id="${lower_name}">${name}</h2>
+	<p class="sub_title">recomended price &#8358;50</p>
+	<div class="input_">
+		<img src="img/icons/remove.svg" onclick=decrement("${lower_name}_selling_price")>
+		<input  type="number" placeholder="50" value="50" id="${lower_name}_selling_price">
+		<img src="img/icons/sell.svg" onclick=increment("${lower_name}_selling_price")>
+	</div>
+	<p class="sub_title">Quantity</p>
+	<div class="input_" >
+		<input type="number"  id="${lower_name}_quantity" placeholder="Quantity value= ${quantity}" />
+	</div>
+	<div class="input_">
+		<select class="unit" style="{ width: 100%; height:100%; border: no-border}" id="${lower_name}_unit"><option selected>${unit}</option> </select>
+	</div>
+	<button class="btn_larger" id="${tempName}_btn" onclick=updateProduct(event) >Update</button>
+	</div>`;
+	container.innerHTML = content;
+	document.getElementById("update_product").style.marginLeft="0vw";
+}
+var closeUpdatePage;
+closeUpdatePage=()=>
+{
+	//close update screen
+	document.getElementById("update_product").style.marginLeft="100vw";
 }
 //add new fuctions / features.

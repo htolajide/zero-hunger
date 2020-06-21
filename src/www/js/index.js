@@ -379,15 +379,11 @@ addStore = (event) => {
 	
 	axios.request(requestOptions)
   	.then( response => {
-		console.log('edit 1');
 		const myStock = response.data.stock;
 		if (myStock.length > 0) {
-			console.log(myStock[0].product_name);
-			
 			for(let i=0; i<myStock.length; i++) {
 				if(myStock[i].product_name === item_name){	
-					console.log('edit 3');
-					const id = product._id;
+					const id = myStock[i]._id;
 					const patchOptions = {
 						url: `https://zero-hunger.herokuapp.com/api/v1/farmer/product/${id}/edit`,
 						method: 'patch',
@@ -399,7 +395,7 @@ addStore = (event) => {
 							console.log('edit 3')
 							console.log('Patch Meassge', feedback.data);
 							submit_btn.textContent = 'Add to store';
-							alert('Product succefully added');
+							alert('Product successfully updated');
 						}
 					).catch(error => alert(`Error: ${error}`))
 					return;

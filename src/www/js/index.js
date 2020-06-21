@@ -380,10 +380,9 @@ addStore = (event) => {
 	axios.request(requestOptions)
   	.then( response => {
 		console.log('edit 1');
-		const myStock = reponse.response.data.stock;
+		const myStock = response.data.stock;
 		if (myStock.length > 0) {
 			console.log('edit 2');
-			
 			for(let i=0; i<myStock.length; i++) {
 				if(myStock[i].name === item_name){	
 					console.log('edit 3');
@@ -404,17 +403,17 @@ addStore = (event) => {
 					).catch(error => alert(`Error: ${error}`))
 					return;
 				}
-			})
+			}
 		} 
+		// post new data to stock, this will throw error if item already exists
+		axios.request(postOptions).then( 
+			feedback => {
+				console.log("Post message",feedback);
+				submit_btn.textContent = 'Add to store';
+				alert('Product succefully added');
+			}
+		).catch(error => alert(`Error: ${error}`));
 	}
 	).catch(error => alert('Error: ' + error));
-	// post new data to stock, this will throw error if item already exists
-	axios.request(postOptions).then( 
-		feedback => {
-			console.log("Post message",feedback);
-			submit_btn.textContent = 'Add to store';
-			alert('Product succefully added');
-		}
-	).catch(error => alert(`Error: ${error}`));
 }
 //add new fuctions / features.

@@ -452,7 +452,7 @@ openUpdatePage=(event)=>
 	<div class="input_">
 		<select class="unit" style="{ width: 100%; height:100%; border: no-border}" id="${lower_name}_unit"><option selected>${unit}</option> </select>
 	</div>
-	<button class="btn_larger" id="${tempName}_btn" onclick=updateProduct(event) >Update</button>
+	<button class="btn_larger" id="${lower_name}_btn" onclick=updateProduct(event) >Update</button>
 	</div>`;
 	container.innerHTML = content;
 	document.getElementById("update_product").style.marginLeft="0vw";

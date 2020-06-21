@@ -384,13 +384,12 @@ addStore = (event) => {
 				if(myStock[i].product_name === item_name){	
 					const id = myStock[i]._id;
 					const patchOptions = {
-						url: `https://zero-hunger.herokuapp.com/api/v1/farmer/product/:id/edit`,
+						url: `https://zero-hunger.herokuapp.com/api/v1/farmer/product/${id}/edit`,
 						method: 'patch',
-						params: { id: id },
 						data: { name: item_name, price: price, quantity: quantity, unit: unit },
 						headers: { 
-							'Content-Type': 'application/x-www-form-urlencoded',
-							Cookie: `farmerid = ${sessionStorage.getItem('farmerid')}; token=${sessionStorage.getItem('token')}` }
+							Cookie: `farmerid = ${sessionStorage.getItem('farmerid')}; token=${sessionStorage.getItem('token')}`
+						}
 					}
 					axios.request(patchOptions).then(
 						feedback => {
@@ -400,7 +399,7 @@ addStore = (event) => {
 							alert('Product successfully updated');
 						}
 					).catch(error => {
-						alert(`Error: ${error}`);
+						alert(`Error: ${error.message}`);
 						submit_btn.textContent = 'Add to store';
 					})
 					return;

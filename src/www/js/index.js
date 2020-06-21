@@ -382,7 +382,7 @@ addStore = (event) => {
 		console.log('edit 1');
 		const myStock = response.data.stock;
 		if (myStock.length > 0) {
-			console.log(myStock[i].name);
+			console.log(myStock[0].name);
 			
 			for(let i=0; i<myStock.length; i++) {
 				if(myStock[i].name === item_name){	

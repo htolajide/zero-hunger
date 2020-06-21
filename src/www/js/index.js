@@ -286,7 +286,7 @@ loadStore = () => {
 				<img src="img/food/tomato.png" class="item_image">
 				<h2 class="title_small" id="${lower_name}_name">${product.product_name}</h2>
 				<h3 class="sub_title" id="${lower_name}_price">price &#8358;${product.price}</h3>
-				<h3 class="sub_title" id="${lowername}_qty_unit">${product.quantity} ${product.unit}</h3>
+				<h3 class="sub_title" id="${lower_name}_qty_unit">${product.quantity} ${product.unit}</h3>
 				<input type="hidden" id="${lower_name}_input" value="${product._id}"/>
 				<button class="btn" id="${lower_name}_id" onclick=openUpdatePage(event) style="background:#d14b72;">update</button>
 				</div>`;

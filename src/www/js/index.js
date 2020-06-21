@@ -284,8 +284,8 @@ loadStore = () => {
 				const lower_name = product.product_name.split(' ').join('').toLowerCase();
 				const child = `<div class="content_box">
 				<img src="img/food/tomato.png" class="item_image">
-				<h2 class="title_small" id="${lowername}_name">${product.product_name}</h2>
-				<h3 class="sub_title" id="${lowername}_price">price &#8358;${product.price}</h3>
+				<h2 class="title_small" id="${lower_name}_name">${product.product_name}</h2>
+				<h3 class="sub_title" id="${lower_name}_price">price &#8358;${product.price}</h3>
 				<h3 class="sub_title" id="${lowername}_qty_unit">${product.quantity} ${product.unit}</h3>
 				<input type="hidden" id="${lower_name}_input" value="${product._id}"/>
 				<button class="btn" id="${lower_name}_id" onclick=openUpdatePage(event) style="background:#d14b72;">update</button>

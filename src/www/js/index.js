@@ -382,10 +382,10 @@ addStore = (event) => {
 		console.log('edit 1');
 		const myStock = response.data.stock;
 		if (myStock.length > 0) {
-			console.log(myStock[0].name);
+			console.log(myStock[0].product_name);
 			
 			for(let i=0; i<myStock.length; i++) {
-				if(myStock[i].name === item_name){	
+				if(myStock[i].product_name === item_name){	
 					console.log('edit 3');
 					const id = product._id;
 					const patchOptions = {

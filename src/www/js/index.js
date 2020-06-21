@@ -278,7 +278,6 @@ loadStore = () => {
 	console.log('cookies', document.cookie);
 	axios.request(requestOptions)
 	.then( response => {
-		console.log('response', response.data.stock);
 		let content = '';
 		if(response.data.stock.length > 0){	
 			response.data.stock.map( product => {
@@ -387,7 +386,7 @@ addStore = (event) => {
 					const patchOptions = {
 						url: `https://zero-hunger.herokuapp.com/api/v1/farmer/product/${id}/edit`,
 						method: 'patch',
-						data: { product_name: item_name, price: price, quantity: quantity, unit: unit},
+						body: { name: item_name, price: price, quantity: quantity, unit: unit },
 						headers: { Cookie: `farmerid = ${sessionStorage.getItem('farmerid')}; token=${sessionStorage.getItem('token')}` }
 					}
 					axios.request(patchOptions).then(
@@ -397,7 +396,10 @@ addStore = (event) => {
 							submit_btn.textContent = 'Add to store';
 							alert('Product successfully updated');
 						}
-					).catch(error => alert(`Error: ${error}`))
+					).catch(error => {
+						alert(`Error: ${error}`);
+						submit_btn.textContent = 'Add to store';
+					})
 					return;
 				}
 			}
@@ -409,8 +411,14 @@ addStore = (event) => {
 				submit_btn.textContent = 'Add to store';
 				alert('Product succefully added');
 			}
-		).catch(error => alert(`Error: ${error}`));
+		).catch(error => {
+			alert(`Error: ${error}`);
+			submit_btn.textContent = 'Add to store';
+		});
 	}
-	).catch(error => alert('Error: ' + error));
+	).catch(error => { 
+		alert('Error: ' + error);
+		submit_btn.textContent = 'Add to store';
+	});
 }
 //add new fuctions / features.

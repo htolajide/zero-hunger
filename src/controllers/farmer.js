@@ -237,12 +237,13 @@ export default{
   },
   editProduct: (req, res) => {
     const name = req.body.name, unit = req.body.unit, quantity = 
-    req.body.quantity, price = req.body.price, farmerid = 
-    req.cookies.farmerid, old_quantity = 0;
+    parseInt(req.body.quantity), price = req.body.price, farmerid = 
+    req.cookies.farmerid;
+    let old_quantity = 0;
     // get old quantity
     FarmerStock.findOne({farmer_id: req.cookies.farmerid, product_name: name}).then(
         stock => {
-            old_quantity = stock.quantity
+            old_quantity += stock.quantity
         }
     )
     .catch(error => res.status(400).json({
@@ -256,7 +257,7 @@ export default{
                 farmer_id: farmerid,
                 product_name: name,
                 unit: unit,
-                quantity: quantity + old_quantity,
+                quantity: old_quantity + quantity,
                 price: price,
                 location: result.data.city,
                 updated_at: new Date()

@@ -457,12 +457,14 @@ openUpdatePage = () =>
 	<button class="btn_larger" id="${input_name}_btn" onclick=closeUpdatePage(event) >Update</button>
 	</div>`;
 	container.innerHTML = content;
-	document.getElementById("update_product").style.marginLeft="0vw";
+	document.getElementById("my_product").style.display="none";
+	document.getElementById("update_product").style.display="flex";
 }
 var closeUpdatePage;
-closeUpdatePage=(event)=>
+closeUpdatePage=()=>
 {
 	//close update screen
-	document.getElementById("update_product").style.marginLeft="100vw";
+	document.getElementById("my_products").style.display="flex";
+	document.getElementById("update_product").style.display="none";
 }
 //add new fuctions / features.

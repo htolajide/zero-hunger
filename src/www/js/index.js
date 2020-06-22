@@ -429,7 +429,6 @@ var openUpdatePage;
 openUpdatePage = () =>
 {
 	//open update screen
-	document.getElementById("update_product").style.marginLeft="0vw";
 	const input_name = event.target.id.split('_')[0];
 	const id = document.getElementById(`${input_name}_input`).value;
 	const name = document.getElementById(`${input_name}_name`).textContent;
@@ -458,7 +457,7 @@ openUpdatePage = () =>
 	<button class="btn_larger" id="${input_name}_btn" onclick=closeUpdatePage(event) >Update</button>
 	</div>`;
 	container.innerHTML = content;
-	
+	document.getElementById("update_product").style.marginLeft="0vw";
 }
 var closeUpdatePage;
 closeUpdatePage=(event)=>

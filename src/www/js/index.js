@@ -462,16 +462,14 @@ openUpdatePage = () =>
 	axios.get('https://zero-hunger.herokuapp.com/api/v1/units')
 	.then(
 		response => {
-			const unit = document.querySelector(`#${input_name}_unit`);
-			for (let i=0; i<unit.length; i++){
-				response.data.map( item => {
-					let option = document.createElement("option");
-					let optiontext = document.createTextNode(item['name']);
-					option.setAttribute("value", item['name']);
-					option.appendChild(optiontext);
-					unit[i].appendChild(option);
+			const selectBox = document.getElementById(`${input_name}_unit`);
+			response.data.map( item => {
+				let option = document.createElement("option");
+				let optiontext = document.createTextNode(item['name']);
+				option.setAttribute("value", item['name']);
+				option.appendChild(optiontext);
+				selectBox.appendChild(option);
 				});
-			}
 		}
 	).catch(error => alert(error));
 	document.getElementById("my_products").style.display="none";

@@ -433,12 +433,12 @@ openUpdatePage = () =>
 	const input_name = event.target.id.split('_')[0];
 	const id = document.getElementById(`${input_name}_input`).value;
 	const name = document.getElementById(`${input_name}_name`).textContent;
-	const price = document.getElementById(`${input_name}_price`).textContent.split(' ').slice(1);
+	const price = document.getElementById(`${input_name}_price`).textContent.slice(6);
 	console.log(price);
 	const quantity = document.getElementById(`${input_name}_qty_unit`).textContent.split(' ')[0];
 	const unit = document.getElementById(`${input_name}_qty_unit`).textContent.split(' ')[1];
 	const container = document.getElementById('product_update_form');
-	const content = `
+	const content = `;
 	<div class="content_box_large">
 	<img src="img/food/tomato.png" class="item_image">
 	<h2 class="title_small" id="${input_name}">${name}</h2>

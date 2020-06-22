@@ -433,7 +433,7 @@ openUpdatePage = () =>
 	const input_name = event.target.id.split('_')[0];
 	const id = document.getElementById(`${input_name}_input`).value;
 	const name = document.getElementById(`${input_name}_name`).textContent;
-	const price = document.getElementById(`${input_name}_price`).textContent.slice(6);
+	const price = document.getElementById(`${input_name}_price`).textContent.slice(7);
 	console.log(price);
 	const quantity = document.getElementById(`${input_name}_qty_unit`).textContent.split(' ')[0];
 	const unit = document.getElementById(`${input_name}_qty_unit`).textContent.split(' ')[1];

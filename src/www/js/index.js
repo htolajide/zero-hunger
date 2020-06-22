@@ -444,7 +444,7 @@ openUpdatePage = () =>
 	<p class="sub_title">recomended price &#8358;50</p>
 	<div class="input_">
 		<img src="img/icons/remove.svg" onclick=decrement("${input_name}_selling_price")>
-		<input  type="number" placeholder="50" value=parseInt(${price}) id="${input_name}_selling_price">
+		<input  type="number" placeholder="50" value=${price} id="${input_name}_selling_price">
 		<img src="img/icons/sell.svg" onclick=increment("${input_name}_selling_price")>
 	</div>
 	<p class="sub_title">Quantity</p>

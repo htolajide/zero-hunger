@@ -424,17 +424,19 @@ addStore = (event) => {
 		submit_btn.textContent = 'Add to store';
 	});
 }
+
 var openUpdatePage;
-openUpdatePage=(event)=>
+openUpdatePage = () =>
 {
 	//open update screen
+	document.getElementById("update_product").style.marginLeft="0vw";
 	const input_name = event.target.id.split('_')[0];
 	const id = document.getElementById(`${input_name}_input`).value;
 	const name = document.getElementById(`${input_name}_name`).textContent;
 	const price = document.getElementById(`${input_name}_price`).textContent;
 	const quantity = document.getElementById(`${input_name}_qty_unit`).textContent.split(' ')[0];
 	const unit = document.getElementById(`${input_name}_qty_unit`).textContent.split(' ')[1]
-	const container = document.getElementById(`product_update_form`)
+	const container = document.getElementById('product_update_form');
 	const content = `
 	<div class="content_box_large">
 	<img src="img/food/tomato.png" class="item_image">
@@ -442,7 +444,7 @@ openUpdatePage=(event)=>
 	<p class="sub_title">recomended price &#8358;50</p>
 	<div class="input_">
 		<img src="img/icons/remove.svg" onclick=decrement("${input_name}_selling_price")>
-		<input  type="number" placeholder="50" value="50" id="${input_name}_selling_price">
+		<input  type="number" placeholder="50" value="${price}" id="${input_name}_selling_price">
 		<img src="img/icons/sell.svg" onclick=increment("${input_name}_selling_price")>
 	</div>
 	<p class="sub_title">Quantity</p>
@@ -455,7 +457,7 @@ openUpdatePage=(event)=>
 	<button class="btn_larger" id="${input_name}_btn" onclick=closeUpdatePage(event) >Update</button>
 	</div>`;
 	container.innerHTML = content;
-	document.getElementById("update_product").style.marginLeft="0vw";
+	
 }
 var closeUpdatePage;
 closeUpdatePage=(event)=>

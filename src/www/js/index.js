@@ -434,8 +434,9 @@ openUpdatePage = () =>
 	const id = document.getElementById(`${input_name}_input`).value;
 	const name = document.getElementById(`${input_name}_name`).textContent;
 	const price = document.getElementById(`${input_name}_price`).textContent;
+	console.log(price);
 	const quantity = document.getElementById(`${input_name}_qty_unit`).textContent.split(' ')[0];
-	const unit = document.getElementById(`${input_name}_qty_unit`).textContent.split(' ')[1]
+	const unit = document.getElementById(`${input_name}_qty_unit`).textContent.split(' ')[1];
 	const container = document.getElementById('product_update_form');
 	const content = `
 	<div class="content_box_large">

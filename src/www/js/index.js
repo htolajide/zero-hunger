@@ -437,27 +437,45 @@ openUpdatePage = () =>
 	const quantity = document.getElementById(`${input_name}_qty_unit`).textContent.split(' ')[0];
 	const unit = document.getElementById(`${input_name}_qty_unit`).textContent.split(' ')[1];
 	const container = document.getElementById('product_update_form');
-	const content = `;
+	const content = `
 	<div class="content_box_large">
 	<img src="img/food/tomato.png" class="item_image">
 	<h2 class="title_small" id="${input_name}">${name}</h2>
 	<p class="sub_title">recomended price &#8358;50</p>
 	<div class="input_">
 		<img src="img/icons/remove.svg" onclick=decrement("${input_name}_selling_price")>
-		<input  type="number" placeholder="50" value=${price} id="${input_name}_selling_price">
+		<input  type="number" placeholder="50" value="${price}" id="${input_name}_selling_price">
 		<img src="img/icons/sell.svg" onclick=increment("${input_name}_selling_price")>
 	</div>
 	<p class="sub_title">Quantity</p>
 	<div class="input_" >
-		<input type="number"  id="${input_name}_quantity" placeholder="Quantity value= ${quantity}" />
+		<input type="number"  id="${input_name}_quantity"  value= "${quantity}" />
 	</div>
 	<div class="input_">
 		<select class="unit" style="{ width: 100%; height:100%; border: no-border}" id="${input_name}_unit"><option selected>${unit}</option> </select>
 	</div>
-	<button class="btn_larger" id="${input_name}_btn" onclick=closeUpdatePage(event) >Update</button>
+	<button class="btn_larger" id="${input_name}_btn" onclick=closeUpdatePage() >Submit</button>
 	</div>`;
 	container.innerHTML = content;
+	// preload unit
+	// preload unit select box
+	axios.get('https://zero-hunger.herokuapp.com/api/v1/units')
+	.then(
+		response => {
+			const unit = document.querySelector(`#${input_name}_unit`);
+			for (let i=0; i<unit.length; i++){
+				response.data.map( item => {
+					let option = document.createElement("option");
+					let optiontext = document.createTextNode(item['name']);
+					option.setAttribute("value", item['name']);
+					option.appendChild(optiontext);
+					unit[i].appendChild(option);
+				});
+			}
+		}
+	).catch(error => alert(error));
 	document.getElementById("my_products").style.display="none";
+	document.getElementById("store_header").style.display="none";
 	document.getElementById("update_product").style.display="flex";
 }
 var closeUpdatePage;
@@ -465,6 +483,7 @@ closeUpdatePage=()=>
 {
 	//close update screen
 	document.getElementById("my_products").style.display="flex";
+	document.getElementById("store_header").style.display="flex";
 	document.getElementById("update_product").style.display="none";
 }
 //add new fuctions / features.

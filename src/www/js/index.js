@@ -385,26 +385,7 @@ addStore = (event) => {
 		if (myStock.length > 0) {
 			for(let i=0; i<myStock.length; i++) {
 				if(myStock[i].product_name === item_name){	
-					const id = myStock[i]._id;
-					const patchOptions = {
-						url: `https://zero-hunger.herokuapp.com/api/v1/farmer/product/${id}/edit`,
-						method: 'patch',
-						data: { name: item_name, price: price, quantity: quantity, unit: unit },
-						headers: { 
-							cookies: `farmerid = ${sessionStorage.getItem('farmerid')}; token=${sessionStorage.getItem('token')}`
-						}
-					}
-					axios.request(patchOptions).then(
-						feedback => {
-							console.log('edit 3')
-							console.log('Patch Meassge', feedback.data);
-							submit_btn.textContent = 'Add to store';
-							alert('Product successfully updated');
-						}
-					).catch(error => {
-						alert(`Error: ${error.message}`);
-						submit_btn.textContent = 'Add to store';
-					})
+					alert(`${item_name} is in your store, go to Mystore for an update`);
 					return;
 				}
 			}
@@ -435,7 +416,6 @@ openUpdatePage = () =>
 	const id = document.getElementById(`${input_name}_input`).value;
 	const name = document.getElementById(`${input_name}_name`).textContent;
 	const price = document.getElementById(`${input_name}_price`).textContent.slice(7); // striping price figure from text
-	console.log(price);
 	const quantity = document.getElementById(`${input_name}_qty_unit`).textContent.split(' ')[0];
 	const unit = document.getElementById(`${input_name}_qty_unit`).textContent.split(' ')[1];
 	const container = document.getElementById('product_update_form');
@@ -466,6 +446,7 @@ openUpdatePage = () =>
 	.then(
 		response => {
 			const selectBox = document.getElementById(`${input_name}_unit`);
+			console.log(selectBox);
 			response.data.map( item => {
 				let option = document.createElement("option");
 				let optiontext = document.createTextNode(item['name']);
@@ -508,7 +489,7 @@ updateProduct = (event) => {
 	const name = document.getElementById(`${inputName}`).textContent;
 	const price = document.getElementById(`${inputName}_price`).value;
 	const quantity = document.getElementById(`${inputName}_quantity`).value;
-	const unit = document.getElementById(`${inputName}_input`).value;
+	const unit = document.getElementById(`${inputName}_unit`).value;
 	const patchOptions = {
 		url: `https://zero-hunger.herokuapp.com/api/v1/farmer/product/${product_id}/edit`,
 		method: 'patch',

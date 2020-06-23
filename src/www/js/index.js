@@ -418,7 +418,6 @@ openUpdatePage = () =>
 	const price = document.getElementById(`${input_name}_price`).textContent.slice(7); // striping price figure from text
 	const quantity = document.getElementById(`${input_name}_qty_unit`).textContent.split(' ')[0];
 	const unit = document.getElementById(`${input_name}_qty_unit`).textContent.split(' ')[1];
-	const selectBox = document.getElementById(`${input_name}_unit`);
 	const container = document.getElementById('product_update_form');
 	const content = `
 	<div class="content_box_large">
@@ -436,13 +435,14 @@ openUpdatePage = () =>
 		<input type="hidden" id="${input_name}_input" value="${id}"/>
 	</div>
 	<div class="input_">
-		<select style="{ width: 100%; height:100%; border: no-border}" id="${input_name}_unit"><option selected>${unit}</option> </select>
+		<select style="{ width: 100%; height:100%; border: no-border}" id="${input_name}_select"><option selected>${unit}</option> </select>
 	</div>
 	<button class="btn_larger" id="${input_name}_btn" onclick=updateProduct(event) >Submit</button>
 	</div>`;
 	container.innerHTML = content;
 	// preload unit
 	// preload unit select box
+	const selectBox = document.getElementById(`${input_name}_select`);
 	axios.get('https://zero-hunger.herokuapp.com/api/v1/units')
 	.then(
 		response => {
@@ -451,7 +451,7 @@ openUpdatePage = () =>
 				let optiontext = document.createTextNode(item['name']);
 				option.setAttribute("value", item['name']);
 				option.appendChild(optiontext);
-				selectBox.replaceChild(option);
+				selectBox.appendChild(option);
 				});
 		}
 	).catch(error => alert(error));

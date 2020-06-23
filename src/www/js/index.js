@@ -21,6 +21,7 @@ nav=(x)=>
             document.getElementById("my_store").style.display="none";
 			document.getElementById("more_selection").style.display="none";
 			console.log(sessionStorage.getItem('location'));
+			loadBuy();
             break;
         case "sell":
             document.getElementById("buy_nav").style.borderBottom ="solid 0vh #73d14b";
@@ -395,7 +396,7 @@ addStore = (event) => {
 			feedback => {
 				console.log("Post message",feedback);
 				submit_btn.textContent = 'Add to store';
-				alert('Product succefully added');
+				alert(feedback.message);
 			}
 		).catch(error => {
 			alert(`Error: ${error}`);
@@ -455,7 +456,7 @@ openUpdatePage = () =>
 				});
 		}
 	).catch(error => alert(error));
-	console.log(selectBox);
+
 	document.getElementById("my_products").style.display="none";
 	document.getElementById("store_header").style.display="none";
 	document.getElementById("update_product").style.display="flex";
@@ -470,13 +471,12 @@ closeUpdatePage=()=>
 }
 var getLocation;
 getLocation = () => {
-	axios.get('https://api.ipstack.com/check?access_key=c934a4c422466d14bb4cdcd82fa49547')
+	axios.get('http://api.ipstack.com/check?access_key=c934a4c422466d14bb4cdcd82fa49547')
 	.then( response => {
 		let location = response.data.city;
 		sessionStorage.setItem('location', location);
 	})
 	.catch(error => alert(error))
-	return location;
 }
 getLocation();
 //add new fuctions / features.
@@ -502,7 +502,7 @@ updateProduct = (event) => {
 		feedback => {
 			console.log('Patch Meassge', feedback.data);
 			submit_btn.textContent = 'Submit';
-			alert('Product successfully updated');
+			alert(feedback.message);
 			nav("Mystore");
 			console.log(sessionStorage.getItem('location'))
 		}
@@ -510,4 +510,53 @@ updateProduct = (event) => {
 		alert(`Error: ${error.message}`);
 		submit_btn.textContent = 'Submit';
 	})
+}
+
+var loadBuy;
+loadBuy = () => {
+	axios.get('https://zero-hunger.herokuapp.com/api/v1/products')
+	.then( result => {
+		const container = document.getElementById('product_selection_list');
+		let content = '';
+		result.data.map( product => {
+			content += `
+			<div class="content_box">
+                    <img src="img/food/tomato.png" class="item_image">
+                    <h2 class="title_small">${product.name}</h2>
+                    <button class="btn" id="${product.name}" onclick=loadTraders(event)>select</button>
+                </div>
+			`;
+		})
+		container.innerHTML = content;
+	})
+	.catch(error => {
+		alert(error)
+	})
+}
+
+var loadTraders;
+loadTraders = (event) => {
+	const product = event.target.id;
+	const city = sessionStorage.getItem('location');
+	const container = document.getElementById('seller_list');
+	let content = '';
+	axios.get(`https://zero-hunger.herokuapp.com/api/v1/${city}/${product}/sellers`)
+	.then( response => {
+		if (response.data.status === "success") {
+			const traders = response.data.result;
+			traders.map( trader => {
+				content += `<div class="content_box_sellers">
+				<div class="pro_pic">
+					${trader.name.charAt(0)}
+				</div>
+				<h2 class="title_small">${trader.name}</h2>
+				<button class="btn" onclick=openBooking()>&#8358; ${trader.price}</button>
+			</div>`
+			})
+			container.innerHTML = content;
+			openTraders();
+		}
+	})
+	.catch( error => alert(error))
+
 }

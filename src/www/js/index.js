@@ -446,13 +446,12 @@ openUpdatePage = () =>
 	axios.get('https://zero-hunger.herokuapp.com/api/v1/units')
 	.then(
 		response => {
-			console.log(selectBox);
 			response.data.map( item => {
 				let option = document.createElement("option");
 				let optiontext = document.createTextNode(item['name']);
 				option.setAttribute("value", item['name']);
 				option.appendChild(optiontext);
-				selectBox.appendChild(option);
+				selectBox.replaceChild(option);
 				});
 		}
 	).catch(error => alert(error));

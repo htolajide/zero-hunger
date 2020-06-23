@@ -422,27 +422,27 @@ openUpdatePage = () =>
 	const content = `
 	<div class="content_box_large">
 	<img src="img/food/tomato.png" class="item_image">
-	<h2 class="title_small" id="${input_name}">${name}</h2>
+	<h2 class="title_small" id="${input_name}_update">${name}</h2>
 	<p class="sub_title">recomended price &#8358;50</p>
 	<div class="input_">
-		<img src="img/icons/remove.svg" onclick=decrement("${input_name}_selling_price")>
-		<input  type="number" placeholder="50" value="${price}" id="${input_name}_selling_price">
-		<img src="img/icons/sell.svg" onclick=increment("${input_name}_selling_price")>
+		<img src="img/icons/remove.svg" onclick=decrement("${input_name}_selling_price_update")>
+		<input  type="number" placeholder="50" value="${price}" id="${input_name}_selling_price_update">
+		<img src="img/icons/sell.svg" onclick=increment("${input_name}_selling_price_update")>
 	</div>
 	<p class="sub_title">Quantity</p>
 	<div class="input_" >
-		<input type="number"  id="${input_name}_quantity"  value= "${quantity}" />
+		<input type="number"  id="${input_name}_quantity_update"  value= "${quantity}" />
 		<input type="hidden" id="${input_name}_input" value="${id}"/>
 	</div>
 	<div class="input_">
-		<select style="{ width: 100%; height:100%; border: no-border}" id="${input_name}_select"><option selected>${unit}</option> </select>
+		<select style="{ width: 100%; height:100%; border: no-border}" id="${input_name}_unit_select"><option selected>${unit}</option> </select>
 	</div>
 	<button class="btn_larger" id="${input_name}_btn" onclick=updateProduct(event) >Submit</button>
 	</div>`;
 	container.innerHTML = content;
 	// preload unit
 	// preload unit select box
-	const selectBox = document.getElementById(`${input_name}_select`);
+	const selectBox = document.getElementById(`${input_name}_unit_select`);
 	axios.get('https://zero-hunger.herokuapp.com/api/v1/units')
 	.then(
 		response => {
@@ -486,10 +486,10 @@ updateProduct = (event) => {
 	submit_btn.textContent = 'Processing...';
 	const inputName = event.target.id.split('_')[0];
 	const product_id = document.getElementById(`${inputName}_input`).value;
-	const name = document.getElementById(`${inputName}`).textContent;
-	const price = document.getElementById(`${inputName}_price`).value;
-	const quantity = document.getElementById(`${inputName}_quantity`).value;
-	const unit = document.getElementById(`${inputName}_unit`).value;
+	const name = document.getElementById(`${inputName}_update`).textContent;
+	const price = document.getElementById(`${inputName}_selling_price_update`).value;
+	const quantity = document.getElementById(`${inputName}_quantity_update`).value;
+	const unit = document.getElementById(`${inputName}_unit_select`).value;
 	const patchOptions = {
 		url: `https://zero-hunger.herokuapp.com/api/v1/farmer/product/${product_id}/edit`,
 		method: 'patch',

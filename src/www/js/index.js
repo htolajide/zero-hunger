@@ -19,7 +19,8 @@ nav=(x)=>
             document.getElementById("product_selection").style.display="flex";
             document.getElementById("sell_section").style.display="none";
             document.getElementById("my_store").style.display="none";
-            document.getElementById("more_selection").style.display="none";
+			document.getElementById("more_selection").style.display="none";
+			console.log(sessionStorage.getItem('location'));
             break;
         case "sell":
             document.getElementById("buy_nav").style.borderBottom ="solid 0vh #73d14b";
@@ -45,6 +46,7 @@ nav=(x)=>
             document.getElementById("my_store").style.display="flex";
 			document.getElementById("more_selection").style.display="none";
 			loadStore();
+			closeUpdatePage();
 			}else openSignin()
             break;
         case "more":
@@ -450,11 +452,12 @@ openUpdatePage = () =>
 	<p class="sub_title">Quantity</p>
 	<div class="input_" >
 		<input type="number"  id="${input_name}_quantity"  value= "${quantity}" />
+		<input type="hidden" id="${input_name}_input" value="${id}"/>
 	</div>
 	<div class="input_">
 		<select class="unit" style="{ width: 100%; height:100%; border: no-border}" id="${input_name}_unit"><option selected>${unit}</option> </select>
 	</div>
-	<button class="btn_larger" id="${input_name}_btn" onclick=closeUpdatePage() >Submit</button>
+	<button class="btn_larger" id="${input_name}_btn" onclick=updateProduct(event) >Submit</button>
 	</div>`;
 	container.innerHTML = content;
 	// preload unit
@@ -484,4 +487,45 @@ closeUpdatePage=()=>
 	document.getElementById("store_header").style.display="flex";
 	document.getElementById("update_product").style.display="none";
 }
+var getLocation;
+getLocation = () => {
+	axios.get('http://api.ipstack.com/check?access_key=c934a4c422466d14bb4cdcd82fa49547')
+	.then( response => {
+		let location = response.data.city;
+		sessionStorage.setItem('location', location);
+	})
+	.catch(error => alert(errr))
+	return location;
+}
+getLocation();
 //add new fuctions / features.
+var updateProduct;
+updateProduct = (event) => {
+	const submit_btn = event.target;
+	submit_btn.textContent = 'Processing...';
+	const inputName = event.target.id.split('_')[0];
+	const product_id = document.getElementById(`${inputName}_input`).value;
+	const name = document.getElementById(`${inputName}`).textContent;
+	const price = document.getElementById(`${inputName}_price`).value;
+	const quantity = document.getElementById(`${inputName}_quantity`).value;
+	const unit = document.getElementById(`${inputName}_input`).value;
+	const patchOptions = {
+		url: `https://zero-hunger.herokuapp.com/api/v1/farmer/product/${product_id}/edit`,
+		method: 'patch',
+		data: { name: name, price: price, quantity: quantity, unit: unit },
+		headers: { 
+			cookies: `farmerid = ${sessionStorage.getItem('farmerid')}; token=${sessionStorage.getItem('token')}`
+		}
+	}
+	axios.request(patchOptions).then(
+		feedback => {
+			console.log('Patch Meassge', feedback.data);
+			submit_btn.textContent = 'Submit';
+			alert('Product successfully updated');
+			closeUpdatePage();
+		}
+	).catch(error => {
+		alert(`Error: ${error.message}`);
+		submit_btn.textContent = 'Submit';
+	})
+}

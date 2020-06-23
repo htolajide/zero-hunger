@@ -446,13 +446,14 @@ openUpdatePage = () =>
 	.then(
 		response => {
 			const selectBox = document.getElementById(`${input_name}_unit`);
-			console.log(selectBox);
+			// console.log(selectBox);
 			response.data.map( item => {
 				let option = document.createElement("option");
 				let optiontext = document.createTextNode(item['name']);
 				option.setAttribute("value", item['name']);
 				option.appendChild(optiontext);
 				selectBox.appendChild(option);
+				console.log(selectBox);
 				});
 		}
 	).catch(error => alert(error));
@@ -470,12 +471,12 @@ closeUpdatePage=()=>
 }
 var getLocation;
 getLocation = () => {
-	axios.get('http://api.ipstack.com/check?access_key=c934a4c422466d14bb4cdcd82fa49547')
+	axios.get('https://api.ipstack.com/check?access_key=c934a4c422466d14bb4cdcd82fa49547')
 	.then( response => {
 		let location = response.data.city;
 		sessionStorage.setItem('location', location);
 	})
-	.catch(error => alert(errr))
+	.catch(error => alert(error))
 	return location;
 }
 getLocation();

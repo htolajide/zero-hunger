@@ -503,7 +503,8 @@ updateProduct = (event) => {
 			console.log('Patch Meassge', feedback.data);
 			submit_btn.textContent = 'Submit';
 			alert('Product successfully updated');
-			closeUpdatePage();
+			nav("Mystore");
+			console.log(sessionStorage.getItem('location'))
 		}
 	).catch(error => {
 		alert(`Error: ${error.message}`);

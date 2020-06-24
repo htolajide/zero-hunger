@@ -20,7 +20,6 @@ nav=(x)=>
             document.getElementById("sell_section").style.display="none";
             document.getElementById("my_store").style.display="none";
 			document.getElementById("more_selection").style.display="none";
-			console.log(sessionStorage.getItem('location'));
 			loadBuy();
             break;
         case "sell":
@@ -387,6 +386,7 @@ addStore = (event) => {
 			for(let i=0; i<myStock.length; i++) {
 				if(myStock[i].product_name === item_name){	
 					alert(`${item_name} is in your store, go to Mystore for an update`);
+					submit_btn.textContent = 'Add to store';
 					return;
 				}
 			}
@@ -514,6 +514,8 @@ updateProduct = (event) => {
 
 var loadBuy;
 loadBuy = () => {
+	const header = document.getElementById('head_title');
+	header.textContent = "Loading..."
 	axios.get('https://zero-hunger.herokuapp.com/api/v1/products')
 	.then( result => {
 		const container = document.getElementById('product_selection_list');
@@ -524,13 +526,14 @@ loadBuy = () => {
                     <img src="img/food/tomato.png" class="item_image">
                     <h2 class="title_small">${product.name}</h2>
                     <button class="btn" id="${product.name}" onclick=loadTraders(event)>select</button>
-                </div>
-			`;
+            </div>`;
 		})
 		container.innerHTML = content;
-	})
+		header.textContent = 'Select food item';
+	}) 
 	.catch(error => {
 		alert(error)
+		header.textContent = 'Select food item';
 	})
 }
 
@@ -539,6 +542,9 @@ loadTraders = (event) => {
 	const product = event.target.id;
 	const city = sessionStorage.getItem('location');
 	const container = document.getElementById('seller_list');
+	const header = document.getElementById('header_title');
+	const product_label = document.getElementById('complement');
+	console.log(city);
 	let content = '';
 	axios.get(`https://zero-hunger.herokuapp.com/api/v1/${city}/${product}/sellers`)
 	.then( response => {
@@ -555,6 +561,8 @@ loadTraders = (event) => {
 			})
 			container.innerHTML = content;
 			openTraders();
+			header.textContent = `${product} Traders in ${city}`;
+			product_label.textContent = product;
 		}
 	})
 	.catch( error => alert(error))

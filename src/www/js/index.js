@@ -173,10 +173,12 @@ getLocation = () => {
 	axios.get('http://api.ipstack.com/check?access_key=c934a4c422466d14bb4cdcd82fa49547')
 	.then( response => {
 		let location = response.data.city;
-		location = location === null ? 'Lagos' : location;
 		sessionStorage.setItem('location', location);
 	})
-	.catch(error => alert(error))
+	.catch(error => {
+		sessionStorage.setItem('location', 'Lagos');
+		console.log(error);
+	})
 }
 getLocation();
 var isLoggedin;
@@ -555,13 +557,14 @@ loadTraders = (event) => {
 	.then( response => {
 		if (response.data.status === "success") {
 			const traders = response.data.result;
+			console.log(traders);
 			traders.map( trader => {
 				content += `<div class="content_box_sellers">
 				<div class="pro_pic">
 					${trader.name.charAt(0)}
 				</div>
 				<h2 class="title_small">${trader.name}</h2>
-				<button class="btn" onclick=openBooking()>&#8358; ${trader.price}/${unit}</button>
+				<button class="btn" onclick=openBooking()>&#8358; ${trader.price}/${trader.unit}</button>
 			</div>`
 			})
 			container.innerHTML = content;

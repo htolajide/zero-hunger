@@ -287,7 +287,7 @@ export default{
           }
       ).catch(error => res.status(400).json({error: error.message}))
       // get stock information
-      FarmerStock.find({product_name: req.params.product}).then(
+      FarmerStock.find({product_name: req.params.product, location: req.params.city}).then(
           result => {
               result.map( item => {
                   ids.push({ 

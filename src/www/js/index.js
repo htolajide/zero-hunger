@@ -168,6 +168,17 @@ decrement=(x)=>
 	
 }
 // new functions
+var getLocation;
+getLocation = () => {
+	axios.get('http://api.ipstack.com/check?access_key=c934a4c422466d14bb4cdcd82fa49547')
+	.then( response => {
+		let location = response.data.city;
+		location = location === null ? 'Lagos' : location;
+		sessionStorage.setItem('location', location);
+	})
+	.catch(error => alert(error))
+}
+getLocation();
 var isLoggedin;
 isLoggedin = () => {
 	if(sessionStorage.getItem('token') !== null ) return true;
@@ -230,10 +241,11 @@ register = () => {
 	let email = document.getElementById('r_email').value;
 	let password = document.getElementById('r_password').value;
 	let fullname = document.getElementById('r_fullname').value;
+	let city = sessionStorage.getItem('location');
 	const register_btn = document.getElementById('register');
 	const url = 'https://zero-hunger.herokuapp.com/api/v1/farmer/signup';
 	
-	const body = { email: email, password: password, fullname: fullname };
+	const body = { email: email, password: password, fullname: fullname, city: city };
 	register_btn.textContent = 'Processing...';
 	axios.post(url, body).then(response => {
 		const responseData = response.data;
@@ -364,6 +376,7 @@ addStore = (event) => {
 	const price = document.getElementById(`${productName}_selling_price`).value;
 	const quantity = document.getElementById(`${productName}_quantity`).value;
 	const unit = document.getElementById(`${productName}_unit`).value;
+	const location = sessionStorage.getItem('location');
 	// here am getting all availabe products and check to either update or add it to farner store
 	const requestOptions = {
 		url: 'https://zero-hunger.herokuapp.com/api/v1/farmer/products',
@@ -375,7 +388,7 @@ addStore = (event) => {
 	  const postOptions = {
 		url: 'https://zero-hunger.herokuapp.com/api/v1/farmer/product/add',
 		method: 'post',
-		data: { name: item_name, price: price, quantity: quantity, unit: unit },
+		data: { name: item_name, price: price, quantity: quantity, unit: unit, location: location },
 		headers: { Cookie: `farmerid = ${sessionStorage.getItem('farmerid')}; token=${sessionStorage.getItem('token')}`}
 	} 
 	
@@ -469,16 +482,7 @@ closeUpdatePage=()=>
 	document.getElementById("store_header").style.display="flex";
 	document.getElementById("update_product").style.display="none";
 }
-var getLocation;
-getLocation = () => {
-	axios.get('http://api.ipstack.com/check?access_key=c934a4c422466d14bb4cdcd82fa49547')
-	.then( response => {
-		let location = response.data.city;
-		sessionStorage.setItem('location', location);
-	})
-	.catch(error => alert(error))
-}
-getLocation();
+
 //add new fuctions / features.
 var updateProduct;
 updateProduct = (event) => {
@@ -490,10 +494,11 @@ updateProduct = (event) => {
 	const price = document.getElementById(`${inputName}_selling_price_update`).value;
 	const quantity = document.getElementById(`${inputName}_quantity_update`).value;
 	const unit = document.getElementById(`${inputName}_unit_select`).value;
+	const location = sessionStorage.getItem('location');
 	const patchOptions = {
 		url: `https://zero-hunger.herokuapp.com/api/v1/farmer/product/${product_id}/edit`,
 		method: 'patch',
-		data: { name: name, price: price, quantity: quantity, unit: unit },
+		data: { name: name, price: price, quantity: quantity, unit: unit, location: location },
 		headers: { 
 			cookies: `farmerid = ${sessionStorage.getItem('farmerid')}; token=${sessionStorage.getItem('token')}`
 		}
@@ -556,7 +561,7 @@ loadTraders = (event) => {
 					${trader.name.charAt(0)}
 				</div>
 				<h2 class="title_small">${trader.name}</h2>
-				<button class="btn" onclick=openBooking()>&#8358; ${trader.price}</button>
+				<button class="btn" onclick=openBooking()>&#8358; ${trader.price}/${unit}</button>
 			</div>`
 			})
 			container.innerHTML = content;

@@ -9,48 +9,41 @@ const FarmerStock = require('../models/farmerStock');
 const Sales = require('../models/sales');
 
 export default{
-  signup: (req, res) => {
+  signup: async (req, res) => {
     const fullname = req.body.fullname, email = req.body.email, password = 
-    req.body.password;
-    axios.get(location.url)
-        .then( async result => { 
-            const farmer = new Farmer({
-                fullname: fullname,
-                email: email,
-                password: await bcrypt.hash(password, 10),
-                city: result.data.city,
-                created_at: new Date(),
-                updated_at: new Date()
-            });
-            Farmer.findOne({email: email}).then( (result) => {
-                if (result){
-                    return res.status(403).json({status: 'Request Failed', message: "Email already exists"})
-                }
-                farmer.save().then( (userData) => {
-                    const token = jwt.sign({ userId: userData._id }, process.env.SECRET ? process.env.SECRET : configuration.secret);
-                    res.cookie('farmerid', userData._id, { expires: new Date(Date.now() + 7200000), httpOnly: true });
-                    res.cookie('token', token, { expires: new Date(Date.now() + 7200000), httpOnly: true });
-                    res.status(201).json({
-                        status: 'Success',
-                        message: 'account successfully created',
-                        cookieUserid: res.cookie.farmerid,
-                        token: token,
-                        userData
-                    })
-                    sendEmail(userData.email);
-                })
-                .catch((error) => {
+    req.body.password, city = req.body.city;
+    const farmer = new Farmer({
+        fullname: fullname,
+        email: email,
+        password: await bcrypt.hash(password, 10),
+        city: result.data.city,
+        created_at: new Date(),
+        updated_at: new Date()
+    });
+    Farmer.findOne({email: email}).then( (result) => {
+        if (result){
+             return res.status(403).json({status: 'Request Failed', message: "Email already exists"})
+        }
+        farmer.save().then( (userData) => {
+            const token = jwt.sign({ userId: userData._id }, process.env.SECRET ? process.env.SECRET : configuration.secret);
+            res.cookie('farmerid', userData._id, { expires: new Date(Date.now() + 7200000), httpOnly: true });
+            res.cookie('token', token, { expires: new Date(Date.now() + 7200000), httpOnly: true });
+            res.status(201).json({
+                status: 'Success',
+                message: 'account successfully created',
+                cookieUserid: res.cookie.farmerid,
+                token: token,
+                userData
+            })
+                sendEmail(userData.email);
+        })
+        .catch((error) => {
                     res.status(400).json({
                         status: 'Failed',
                         message: error.message
                     });
-                });
-            })
-        })
-        .catch(error => res.status(400).json({
-            status: 'Failed', 
-            message: error.message
-        }));
+        });
+    })
   },
   getAll: (req, res, ) => {
 	Farmer.find().then(
@@ -119,31 +112,27 @@ export default{
   },
   editFarmer: async (req, res) => {
     const fullname = req.body.fullname, email = req.body.email, password = 
-    req.body.password;
-    axios.get(location.url)
-    .then(async result => {
-        const farmer = new Farmer({
-            _id: req.cookies.farmerid,
-            fullname: fullname,
-            email: email,
-            password: await bcrypt.hash(password, 10),
-            city: result.data.city,
-            updated_at: new Date()
-        });
+    req.body.password, city = req.body.city;
+    const farmer = new Farmer({
+        _id: req.cookies.farmerid,
+        fullname: fullname,
+        email: email,
+        password: await bcrypt.hash(password, 10),
+        city: city,
+        updated_at: new Date()
+    });
     
-        Farmer.updateOne({_id: req.cookies.farmerid}, farmer).then( () => {
-            res.status(201).json({
-                status: 'Success',
-                message: 'account successfully updated',
-            })
+    Farmer.updateOne({_id: req.cookies.farmerid}, farmer).then( () => {
+        res.status(201).json({
+            status: 'Success',
+            message: 'account successfully updated',
         })
-        .catch((error) => {
-            res.status(400).json({
-                 error: error.message
-            });
-        });
     })
-    .catch(error => res.status(400).json({status:'Failed', message: error.message})) 
+    .catch((error) => {
+        res.status(400).json({
+            error: error.message
+        });
+    }); 
   },
  deleteOne: (req, res) => {
 	Farmer.deleteOne({_id: req.params.id}).then(
@@ -175,40 +164,33 @@ export default{
   },
   addProduct: (req, res) => {
     const name = req.body.name, unit = req.body.unit, quantity =
-    req.body.quantity, price = req.body.price;
+    req.body.quantity, price = req.body.price, location = req.body.location;
     const farmerid = req.cookies.farmerid;
-    axios.get(location.url).then(
+    const stock = new FarmerStock({
+        farmer_id: req.cookies.farmerid,
+        product_name: name,
+        unit: unit,
+        quantity: quantity,
+        price: price,
+        location: location
+    })
+    FarmerStock.findOne({product_name: name, farmer_id: farmerid }).then(
         result => {
-            const stock = new FarmerStock({
-                farmer_id: req.cookies.farmerid,
-                product_name: name,
-                unit: unit,
-                quantity: quantity,
-                price: price,
-                location: result.data.city
+            if (result) return res.status(403).json({ status: 'failed', message:'product is in stock'});
+            stock.save().then( data => {
+                res.status(201).json({
+                    status: 'success',
+                    data
+                });
             })
-            FarmerStock.findOne({product_name: name, farmer_id: farmerid }).then(
-                result => {
-                    if (result) return res.status(403).json({ status: 'failed', message:'product is in stock'});
-                    stock.save().then( data => {
-                        res.status(201).json({
-                            status: 'success',
-                            data
-                        });
-                    })
-                    .catch(error => res.status(400).json({
-                        status: 'failed', message: error.message})
-                    )
-                }
-            )
             .catch(error => res.status(400).json({
-                status: 'Failed', message: error.message})
+                status: 'failed', message: error.message})
             )
         }
     )
     .catch(error => res.status(400).json({
         status: 'Failed', message: error.message})
-    ) 
+    )
   },
   getProducts: (req, res) => {
       FarmerStock.find({farmer_id: req.cookies.farmerid}).then(
@@ -222,23 +204,18 @@ export default{
       )
   },
   showProducts: (req, res) => {
-      axios.get(location.url).then(
-          result => {
-            FarmerStock.find({location: result.data.city }).then(
-                products => {
-                    if (!products) return res.status(400).json({status: 'Failed', message: 'Products not found'})
-                    res.status(200).json({products})
-                }
-            )
-            .catch(error => res.status(400).json({status: 'Failed', message: error.message}))
-          }
-      )
-      .catch(error => res.status(400).json({status: 'Failed', message: error.message}))
+    FarmerStock.find({location: req.params.location }).then(
+        products => {
+            if (!products) return res.status(400).json({status: 'Failed', message: 'Products not found'})
+                res.status(200).json({products})
+            }
+        )
+        .catch(error => res.status(400).json({status: 'Failed', message: error.message}))
   },
   editProduct: (req, res) => {
     const name = req.body.name, unit = req.body.unit, quantity = 
     parseInt(req.body.quantity), price = req.body.price, farmerid = 
-    req.cookies.farmerid;
+    req.cookies.farmerid, location = req.body.location;
     let old_quantity = 0;
     // get old quantity
     FarmerStock.findOne({farmer_id: req.cookies.farmerid, product_name: name}).then(
@@ -250,35 +227,39 @@ export default{
         status:'failed', message: error.message
       })
     )
-    axios.get(location.url).then(
-        result => {
-            const stock = new FarmerStock({
-                _id : req.params.id,
-                farmer_id: farmerid,
-                product_name: name,
-                unit: unit,
-                quantity: old_quantity + quantity,
-                price: price,
-                location: result.data.city,
-                updated_at: new Date()
-            })
-            FarmerStock.updateOne({ _id: req.params.id, farmer_id: farmerid }, stock).then( () => {
-                res.status(201).json({
-                    status: 'success',
-                    message: 'Product successfully edited'
-                });
-            })
-            .catch(error => res.status(400).json({
-                status: 'failed', message: error.message})
-            )
-        }   
-    )
+    const stock = new FarmerStock({
+        _id : req.params.id,
+        farmer_id: farmerid,
+        product_name: name,
+        unit: unit,
+        quantity: old_quantity + quantity,
+        price: price,
+        location: location,
+        updated_at: new Date()
+    })
+    FarmerStock.updateOne({ _id: req.params.id, farmer_id: farmerid }, stock).then( () => {
+        res.status(201).json({
+            status: 'success',
+            message: 'Product successfully edited'
+        });
+    })
     .catch(error => res.status(400).json({
         status: 'failed', message: error.message})
-    ) 
+    )
   },
   getSales: (req, res) => {
     Sales.find({ farmer_id: req.cookies.farmerid }).then(
+        stock => {
+            res.status(200).json({stock})
+        }
+    )
+    .catch(error => res.status(400).json({
+        status:'failed', message: error.message
+      })
+    )
+  },
+  getStock: (req, res) => {
+    FarmerStock.find().then(
         stock => {
             res.status(200).json({stock})
         }
@@ -306,7 +287,7 @@ export default{
           }
       ).catch(error => res.status(400).json({error: error.message}))
       // get stock information
-      FarmerStock.find({product_name: req.params.product, location: req.params.city}).then(
+      FarmerStock.find({product_name: req.params.product}).then(
           result => {
               result.map( item => {
                   ids.push({ 
@@ -323,7 +304,8 @@ export default{
                 let result = farmers.filter( farmer => {
                     farmer.price = id.price;
                     farmer.product_name = id.product_name;
-                    farmer.quantity = `${id.quantity} ${id.unit}`
+                    farmer.quantity = id.quantity;
+                    farmer.unit = id.unit;
                     if (farmer.farmerid == id.farmerid ) return farmer
                 })
                 output.push(result[0]);
@@ -331,7 +313,7 @@ export default{
               res.status(200).json({status: 'success', result: output});
           }
       )
-      .catch(error => res.status(400).json({status: 'Failed', message: error.message }))
+      .catch(error => res.status(400).json({status: 'Failed', message: error.message }));
   }
 
 }

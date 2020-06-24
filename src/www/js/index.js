@@ -409,9 +409,8 @@ addStore = (event) => {
 		// post new data to stock, this will throw error if item already exists
 		axios.request(postOptions).then( 
 			feedback => {
-				console.log("Post message",feedback);
 				submit_btn.textContent = 'Add to store';
-				alert(feedback.message);
+				alert(feedback.data.message);
 			}
 		).catch(error => {
 			alert(`Error: ${error}`);
@@ -509,12 +508,11 @@ updateProduct = (event) => {
 		feedback => {
 			console.log('Patch Meassge', feedback.data);
 			submit_btn.textContent = 'Submit';
-			alert(feedback.message);
+			alert(feedback.data.message);
 			nav("Mystore");
-			console.log(sessionStorage.getItem('location'))
 		}
 	).catch(error => {
-		alert(`Error: ${error.message}`);
+		alert(`Error: ${error}`);
 		submit_btn.textContent = 'Submit';
 	})
 }

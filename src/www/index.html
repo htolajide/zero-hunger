@@ -94,26 +94,26 @@
             <div class="full_page_container">
                 <div id="ordering_list" class="order_list">
                     <img src="img/food/tomato.png" class="large_image">
-                    <h1 class="title_bright">&#8358;50</h1>
+                    <h1 class="title_bright" id="order_price">&#8358;50</h1>
                     <div class="input_">
                         <img src="img/icons/remove.svg" onclick=decrement("ordered_item")>
-                        <input  type="number" placeholder="Number of item needed" id="ordered_item">
+                        <input  type="number" placeholder="Number of item needed" id="order_qty">
                         <img src="img/icons/sell.svg" onclick=increment("ordered_item")>
                     </div>
                     <div class="input_">
                         
-                        <input  type="text" placeholder="Email">
+                        <input  type="text" id="order_name" placeholder="Name">
                         
                     </div>
                     <div class="input_">
                         
-                        <input  type="number" placeholder="Mobile number">
+                        <input  type="number" id="order_phone" placeholder="Mobile number">
                         
                     </div>
                     <div class="input_">
-                        <input  type="text" placeholder="Address">
+                        <input  type="text" id="order_address" placeholder="Address">
                     </div>
-                    <button class="btn_larger" onclick=updatePage()>Order</button>
+                    <button class="btn_larger" id="order_btn" onclick=orderProduct()>Order</button>
                 </div>
             </div>
             

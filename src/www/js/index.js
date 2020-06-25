@@ -125,8 +125,18 @@ closeBooking=()=>
 	document.getElementById("place_order").style.marginLeft="100vw";
 }
 var openBooking;
-openBooking=()=>
+openBooking=(event)=>
 {
+	// get product data to transfer
+	const id = event.target.id.split('_')[0];
+	const productInfo = document.getElementById(id).value;
+	//prouctInfo conatains name,price,qty and unit of product, we split and save each in a sessionStorage
+	sessionStorage.setItem('product_name', productInfo.split(' ')[0]);
+	sessionStorage.setItem('price', productInfo.split(' ')[1]);
+	sessionStorage.setItem('quantity', productInfo.split(' ')[2]);
+	sessionStorage.setItem('unit', productInfo.split(' ')[3]);
+	sessionStorage.setItem('farmer_id', id);
+	document.getElementById('order_price').innerHTML = `&#8358;${sessionStorage.getItem('price')}`
 	//open booking screen
 	document.getElementById("place_order").style.marginLeft="0vw";
 }
@@ -561,8 +571,9 @@ loadTraders = (event) => {
 				<div class="pro_pic">
 					${trader.name.charAt(0)}
 				</div>
+				<input type="hidden" id="${trader.farmerid}" value="${trader.product_name} ${trader.price} ${trader.quantity} ${trader.unit}"/>
 				<h2 class="title_small">${trader.name}</h2>
-				<button class="btn" onclick=openBooking()>&#8358; ${trader.price}/${trader.unit}</button>
+				<button class="btn" id="${trader.farmerid}_btn" onclick=openBooking(event)>&#8358; ${trader.price}/${trader.unit}</button>
 			</div>`
 			})
 			container.innerHTML = content;
@@ -572,5 +583,40 @@ loadTraders = (event) => {
 		}
 	})
 	.catch( error => alert(error))
-
+}
+var orderProduct;
+orderProduct = () => {
+	const order_btn = document.getElementById('order_btn');
+	order_btn.textContent = 'Processing...'
+	const quantity = document.getElementById('order_qty').value,
+	buyer = document.getElementById('order_name').value,
+	phone = document.getElementById('order_phone').value,
+	address = document.getElementById('order_address').value,
+	product_name = sessionStorage.getItem('product_name'),
+	price = sessionStorage.getItem('price'),
+	unit = sessionStorage.getItem('unit'),
+	farmer_id = sessionStorage.getItem('farmer_id');
+	
+	const postParameter = {
+		url: 'https://zero-hunger.herokuapp.com/api/v1/buyer/product/buy',
+		method: 'post',
+		data: {
+			product_name: product_name,
+			price: price,
+			quantity: quantity,
+			unit: unit,
+			farmerid: farmer_id,
+			buyer: buyer,
+			phone: phone,
+			address: address
+		}
+	}
+	axios.request(postParameter).then( result => {
+		if (result.data.status === 'success') alert('Order successful');
+		order_btn.textContent = 'Order'
+	})
+	.catch(error => {
+		alert (error);
+		order_btn.textContent = 'Order';
+	})
 }

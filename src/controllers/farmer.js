@@ -246,6 +246,7 @@ export default{
     .catch(error => res.status(400).json({
         status: 'failed', message: error.message})
     )
+
   },
   getSales: (req, res) => {
     Sales.find({ farmer_id: req.cookies.farmerid }).then(
@@ -270,7 +271,7 @@ export default{
     )
   },
   getSellers: (req, res) => {
-    const ids = []; // store farmer ids
+    const farmer_products = [] // store farmer product 
     const farmers = []; // store farmers
     const output = []; // store output
     // get all farmers
@@ -287,20 +288,20 @@ export default{
           }
       ).catch(error => res.status(400).json({error: error.message}))
       // get stock information
-      FarmerStock.find({product_name: req.params.product, location: req.params.city}).then(
+      FarmerStock.find({product_name: req.params.product}).then(
           result => {
               result.map( item => {
-                  ids.push({ 
+                  farmer_products.push({ 
                       farmerid: item.farmer_id, 
                       product_name: item.product_name, 
                       price: item.price, 
                       quantity: item.quantity ,
                       unit: item.unit,
-                    });
+                  });
               })
 
             // loop through fetched seller/farmer and return name and stock info
-            ids.forEach( id => {
+            farmer_products.forEach( id => {
                 let result = farmers.filter( farmer => {
                     farmer.price = id.price;
                     farmer.product_name = id.product_name;
@@ -308,8 +309,9 @@ export default{
                     farmer.unit = id.unit;
                     if (farmer.farmerid == id.farmerid ) return farmer
                 })
-                output.push(result[0]);
+                if (result[0] !== undefined) output.push(result[0]);
             })
+            // filter output null values
               res.status(200).json({status: 'success', result: output});
           }
       )

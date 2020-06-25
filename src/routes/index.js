@@ -31,8 +31,8 @@ export default (app) => {
   app.delete('/api/v1/buyer/all/delete', buyer.deleteAll); // API route for deleting all buyers
   app.put('/api/v1/buyer/profile/edit', validator.auth, authenticator, buyer.editBuyer) //Api route for edit buyer profile
   app.get('/api/v1/user/location', location.getLocation); 
-  app.get('/api/v1/buyer/products', authenticator, buyer.getSales);
-  app.post('/api/v1/buyer/product/buy', authenticator, buyer.buyProduct);
+  app.get('/api/v1/buyer/products',  buyer.getSales);
+  app.post('/api/v1/buyer/product/buy', buyer.buyProduct);
   app.post('/api/v1/product/add', product.addProduct);
   app.post('/api/v1/unit/add', unit.addUnit);
   app.get('/api/v1/products/', product.getProduct);

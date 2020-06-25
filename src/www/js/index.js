@@ -613,7 +613,8 @@ orderProduct = () => {
 	}
 	axios.request(postParameter).then( result => {
 		if (result.data.status === 'success') alert('Order successful');
-		order_btn.textContent = 'Order'
+		order_btn.textContent = 'Order';
+		sessionStorage.clear();
 	})
 	.catch(error => {
 		alert (error);

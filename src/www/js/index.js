@@ -582,7 +582,7 @@ loadTraders = (event) => {
 				traders.map( trader => {
 					content += `<div class="content_box_sellers">
 					<div class="pro_pic">
-						${trader.name.charAt(0)}
+						${trader.farmer.charAt(0)}
 					</div>
 					<input type="hidden" id="${trader.farmerid}" value="${trader.product_name}_${trader.price}_${trader.quantity}_${trader.unit}"/>
 					<h2 class="title_small">${trader.farmer}</h2>

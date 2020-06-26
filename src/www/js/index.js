@@ -296,7 +296,7 @@ loadStore = () => {
 		  url: 'https://zero-hunger.herokuapp.com/api/v1/farmer/products',
 		  method: 'get',
 		  headers: {
-			  Cookie: `farmerid=${sessionStorage.getItem('farmerid')}; token=${sessionStorage.getItem('token')}`
+			  cookies: `farmerid=${sessionStorage.getItem('farmerid')}; token=${sessionStorage.getItem('token')}`
 		  }
 	};
 	header.textContent = 'Loading products...'
@@ -405,14 +405,14 @@ addStore = (event) => {
 		url: 'https://zero-hunger.herokuapp.com/api/v1/farmer/products',
 		method: 'get',
 		headers: {
-			Cookie: `farmerid=${sessionStorage.getItem('farmerid')}; token=${sessionStorage.getItem('token')}`
+			cookies: `farmerid=${sessionStorage.getItem('farmerid')}; token=${sessionStorage.getItem('token')}`
 		}
 	  };
 	  const postOptions = {
 		url: 'https://zero-hunger.herokuapp.com/api/v1/farmer/product/add',
 		method: 'post',
 		data: { name: item_name, price: price, quantity: quantity, unit: unit, farmer: farmer, location: location },
-		headers: { Cookie: `farmerid = ${sessionStorage.getItem('farmerid')}; token=${sessionStorage.getItem('token')}`}
+		headers: { cookies: `farmerid = ${sessionStorage.getItem('farmerid')}; token=${sessionStorage.getItem('token')}`}
 	} 
 	
 	axios.request(requestOptions)
@@ -566,6 +566,8 @@ loadBuy = () => {
 
 var loadTraders;
 loadTraders = (event) => {
+	const select_btn = event.target;
+	select_btn.textContent = 'Loading...'
 	const product = event.target.id;
 	const location = sessionStorage.getItem('location');
 	const container = document.getElementById('seller_list');
@@ -589,6 +591,7 @@ loadTraders = (event) => {
 			})
 			} else { content = 'Trader(s) not available'}	
 			container.innerHTML = content;
+			select_btn.textContent = 'Select'
 			openTraders();
 			header.textContent = `${product} Traders in ${city}`;
 			product_label.textContent = product;

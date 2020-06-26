@@ -178,12 +178,12 @@ export default{
     FarmerStock.findOne({product_name: name, farmer_id: farmerid }).then(
         result => {
             if (result) return res.status(403).json({ status: 'failed', message:'product is in stock'});
-            stock.save().then( data => {
+            stock.save().then( 
                 res.status(201).json({
                     status: 'success',
-                    data
-                });
-            })
+                    message: 'Product successfully added'
+                })
+            )
             .catch(error => res.status(400).json({
                 status: 'failed', message: error.message})
             )

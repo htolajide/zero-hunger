@@ -40,5 +40,5 @@ export default (app) => {
   app.get('/api/v1/products/', product.getProduct);
   app.get('/api/v1/units/', unit.getUnit);
   app.get('/api/v1/stock/all', farmer.getStock); // all stock
-  app.get('/api/v1/:city/:product/sellers', farmer.getSellers);
+  app.get('/api/v1/:location/:product/sellers', farmer.getSellers);
 };

@@ -593,7 +593,7 @@ loadTraders = (event) => {
 			container.innerHTML = content;
 			select_btn.textContent = 'Select'
 			openTraders();
-			header.textContent = `${product} Traders in ${city}`;
+			header.textContent = `${product} Traders in ${location}`;
 			product_label.textContent = product;
 		}
 	})

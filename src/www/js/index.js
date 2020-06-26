@@ -411,7 +411,7 @@ addStore = (event) => {
 	  const postOptions = {
 		url: 'https://zero-hunger.herokuapp.com/api/v1/farmer/product/add',
 		method: 'post',
-		data: { name: item_name, price: price, quantity: quantity, unit: unit, farmer = farmer, location: location },
+		data: { name: item_name, price: price, quantity: quantity, unit: unit, farmer: farmer, location: location },
 		headers: { Cookie: `farmerid = ${sessionStorage.getItem('farmerid')}; token=${sessionStorage.getItem('token')}`}
 	} 
 	

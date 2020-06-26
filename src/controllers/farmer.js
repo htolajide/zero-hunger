@@ -164,7 +164,7 @@ export default{
   },
   addProduct: (req, res) => {
     const name = req.body.name, unit = req.body.unit, quantity =
-    req.body.quantity, price = req.body.price, location = req.body.location;
+    req.body.quantity, price = req.body.price, farmer = req.body.farmer, location = req.body.location;
     const farmerid = req.cookies.farmerid;
     const stock = new FarmerStock({
         farmer_id: req.cookies.farmerid,
@@ -172,6 +172,7 @@ export default{
         unit: unit,
         quantity: quantity,
         price: price,
+        farmer: farmer,
         location: location
     })
     FarmerStock.findOne({product_name: name, farmer_id: farmerid }).then(
@@ -203,8 +204,17 @@ export default{
         })
       )
   },
+  deleteProduct: (req, res) => {
+    FarmerStock.deleteOne({farmer_id: req.cookies.farmerid, product_name: req.cookies.product_name}).then(
+        res.status(200).json({status: 'success', message: 'product delete from stock'})
+    )
+    .catch(error => res.status(400).json({
+        status:'failed', message: error.message
+      })
+    )
+},
   showProducts: (req, res) => {
-    FarmerStock.find({location: req.params.location }).then(
+    FarmerStock.find({location: req.params.location}).then(
         products => {
             if (!products) return res.status(400).json({status: 'Failed', message: 'Products not found'})
                 res.status(200).json({products})
@@ -215,7 +225,7 @@ export default{
   editProduct: (req, res) => {
     const name = req.body.name, unit = req.body.unit, quantity = 
     parseInt(req.body.quantity), price = req.body.price, farmerid = 
-    req.cookies.farmerid, location = req.body.location;
+    req.cookies.farmerid, farmer = req.body.farmer, location = req.body.location;
     let old_quantity = 0;
     // get old quantity
     FarmerStock.findOne({farmer_id: req.cookies.farmerid, product_name: name}).then(
@@ -234,6 +244,7 @@ export default{
         unit: unit,
         quantity: old_quantity + quantity,
         price: price,
+        farmer: farmer,
         location: location,
         updated_at: new Date()
     })
@@ -271,51 +282,19 @@ export default{
     )
   },
   getSellers: (req, res) => {
-    const farmer_products = [] // store farmer product 
-    const farmers = []; // store farmers
-    const output = []; // store output
-    // get all farmers
-      Farmer.find({city: req.params.city}).then(
-          farmer => {
-              farmer.map( item => {
-                  farmers.push({
-                      farmerid: item._id,
-                      name: item.fullname, 
-                      email: item.email, 
-                      city: item.city 
-                    })
-              })
+    FarmerStock.find({product_name: req.params.product, location: req.params.location}).then(
+        result => {
+            res.status(200).json({status: 'success', result: result});
           }
-      ).catch(error => res.status(400).json({error: error.message}))
-      // get stock information
-      FarmerStock.find({product_name: req.params.product}).then(
-          result => {
-              result.map( item => {
-                  farmer_products.push({ 
-                      farmerid: item.farmer_id, 
-                      product_name: item.product_name, 
-                      price: item.price, 
-                      quantity: item.quantity ,
-                      unit: item.unit,
-                  });
-              })
-
-            // loop through fetched seller/farmer and return name and stock info
-            farmer_products.forEach( id => {
-                let result = farmers.filter( farmer => {
-                    farmer.price = id.price;
-                    farmer.product_name = id.product_name;
-                    farmer.quantity = id.quantity;
-                    farmer.unit = id.unit;
-                    if (farmer.farmerid == id.farmerid ) return farmer
-                })
-                if (result[0] !== undefined) output.push(result[0]);
-            })
-            // filter output null values
-              res.status(200).json({status: 'success', result: output});
+      )
+      .catch(error => res.status(400).json({status: 'Failed', message: error.message }));
+  },
+  deleteStock: (req, res) => {
+    FarmerStock.deleteMany().then(
+        result => {
+            res.status(200).json({status: 'success', message: 'Stock sucessfuly deleted'});
           }
       )
       .catch(error => res.status(400).json({status: 'Failed', message: error.message }));
   }
-
 }

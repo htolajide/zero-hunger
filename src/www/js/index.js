@@ -131,10 +131,10 @@ openBooking=(event)=>
 	const id = event.target.id.split('_')[0];
 	const productInfo = document.getElementById(id).value;
 	//prouctInfo conatains name,price,qty and unit of product, we split and save each in a sessionStorage
-	sessionStorage.setItem('product_name', productInfo.split(' ')[0]);
-	sessionStorage.setItem('price', productInfo.split(' ')[1]);
-	sessionStorage.setItem('quantity', productInfo.split(' ')[2]);
-	sessionStorage.setItem('unit', productInfo.split(' ')[3]);
+	sessionStorage.setItem('product_name', productInfo.split('_')[0]);
+	sessionStorage.setItem('price', productInfo.split('_')[1]);
+	sessionStorage.setItem('quantity', productInfo.split('_')[2]);
+	sessionStorage.setItem('unit', productInfo.split('_')[3]);
 	sessionStorage.setItem('farmer_id', id);
 	document.getElementById('order_price').innerHTML = `&#8358;${sessionStorage.getItem('price')}`
 	//open booking screen
@@ -308,6 +308,16 @@ loadStore = () => {
 		if(response.data.stock.length > 0){	
 			response.data.stock.map( product => {
 				const lower_name = product.product_name.split(' ').join('').toLowerCase();
+				if(product.quantity === 0) {
+					const deleteOptions = {
+						url: 'https://zero-hunger.herokuapp.com/api/v1/farmer/product/delete',
+						method: 'delete',
+						headers: {
+							cookies: `farmerid=${sessionStorage.getItem('farmerid')}; product_name=${product.product_name}`
+						}
+				  };
+					axios.request(deleteOptions).then().catch(error => alert(error))
+				}
 				const child = `<div class="content_box">
 				<img src="img/food/tomato.png" class="item_image">
 				<h2 class="title_small" id="${lower_name}_name">${product.product_name}</h2>
@@ -389,6 +399,7 @@ addStore = (event) => {
 	const quantity = document.getElementById(`${productName}_quantity`).value;
 	const unit = document.getElementById(`${productName}_unit`).value;
 	const location = sessionStorage.getItem('location');
+	const farmer = sessionStorage.getItem('fullname');
 	// here am getting all availabe products and check to either update or add it to farner store
 	const requestOptions = {
 		url: 'https://zero-hunger.herokuapp.com/api/v1/farmer/products',
@@ -400,7 +411,7 @@ addStore = (event) => {
 	  const postOptions = {
 		url: 'https://zero-hunger.herokuapp.com/api/v1/farmer/product/add',
 		method: 'post',
-		data: { name: item_name, price: price, quantity: quantity, unit: unit, location: location },
+		data: { name: item_name, price: price, quantity: quantity, unit: unit, farmer = farmer, location: location },
 		headers: { Cookie: `farmerid = ${sessionStorage.getItem('farmerid')}; token=${sessionStorage.getItem('token')}`}
 	} 
 	
@@ -506,10 +517,11 @@ updateProduct = (event) => {
 	const quantity = document.getElementById(`${inputName}_quantity_update`).value;
 	const unit = document.getElementById(`${inputName}_unit_select`).value;
 	const location = sessionStorage.getItem('location');
+	const farmer = sessionStorage.getItem('fullname');
 	const patchOptions = {
 		url: `https://zero-hunger.herokuapp.com/api/v1/farmer/product/${product_id}/edit`,
 		method: 'patch',
-		data: { name: name, price: price, quantity: quantity, unit: unit, location: location },
+		data: { name: name, price: price, quantity: quantity, unit: unit, farmer: farmer,location: location },
 		headers: { 
 			cookies: `farmerid = ${sessionStorage.getItem('farmerid')}; token=${sessionStorage.getItem('token')}`
 		}
@@ -555,27 +567,27 @@ loadBuy = () => {
 var loadTraders;
 loadTraders = (event) => {
 	const product = event.target.id;
-	const city = sessionStorage.getItem('location');
+	const location = sessionStorage.getItem('location');
 	const container = document.getElementById('seller_list');
 	const header = document.getElementById('header_title');
 	const product_label = document.getElementById('complement');
-	console.log(city);
 	let content = '';
-	axios.get(`https://zero-hunger.herokuapp.com/api/v1/${city}/${product}/sellers`)
+	axios.get(`https://zero-hunger.herokuapp.com/api/v1/${location}/${product}/sellers`)
 	.then( response => {
 		if (response.data.status === "success") {
 			const traders = response.data.result;
-			console.log(traders);
-			traders.map( trader => {
-				content += `<div class="content_box_sellers">
-				<div class="pro_pic">
-					${trader.name.charAt(0)}
-				</div>
-				<input type="hidden" id="${trader.farmerid}" value="${trader.product_name} ${trader.price} ${trader.quantity} ${trader.unit}"/>
-				<h2 class="title_small">${trader.name}</h2>
-				<button class="btn" id="${trader.farmerid}_btn" onclick=openBooking(event)>&#8358; ${trader.price}/${trader.unit}</button>
-			</div>`
+			if(traders.length > 0){
+				traders.map( trader => {
+					content += `<div class="content_box_sellers">
+					<div class="pro_pic">
+						${trader.name.charAt(0)}
+					</div>
+					<input type="hidden" id="${trader.farmerid}" value="${trader.product_name}_${trader.price}_${trader.quantity}_${trader.unit}"/>
+					<h2 class="title_small">${trader.farmer}</h2>
+					<button class="btn" id="${trader.farmerid}_btn" onclick=openBooking(event)>&#8358; ${trader.price}/${trader.unit}</button>
+				</div>`
 			})
+			} else { content = 'Trader(s) not available'}	
 			container.innerHTML = content;
 			openTraders();
 			header.textContent = `${product} Traders in ${city}`;

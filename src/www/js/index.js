@@ -132,11 +132,11 @@ openBooking=(event)=>
 	const productInfo = document.getElementById(id).value;
 	//prouctInfo conatains name,price,qty and unit of product, we split and save each in a sessionStorage
 	sessionStorage.setItem('product_name', productInfo.split('_')[0]);
-	sessionStorage.setItem('price', productInfo.split('_')[1]);
-	sessionStorage.setItem('quantity', productInfo.split('_')[2]);
-	sessionStorage.setItem('unit', productInfo.split('_')[3]);
-	sessionStorage.setItem('farmer_id', id);
-	document.getElementById('order_price').innerHTML = `&#8358;${sessionStorage.getItem('price')}`
+	const price = sessionStorage.setItem('price', productInfo.split('_')[1]),
+	quantity = sessionStorage.setItem('quantity', productInfo.split('_')[2]),
+	unit = sessionStorage.setItem('unit', productInfo.split('_')[3]),
+	farmer_id = sessionStorage.setItem('farmer_id', id);
+	document.getElementById('order_price').innerHTML = `&#8358;${price} per ${unit}`;
 	//open booking screen
 	document.getElementById("place_order").style.marginLeft="0vw";
 }

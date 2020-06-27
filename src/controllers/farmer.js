@@ -248,6 +248,7 @@ export default{
         updated_at: new Date()
     })
     FarmerStock.updateOne({ _id: req.params.id}, stock).then( () => {
+        console.log(old_quantity);
         res.status(201).json({
             status: 'success',
             message: 'Product successfully edited'

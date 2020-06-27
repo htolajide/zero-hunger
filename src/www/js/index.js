@@ -136,7 +136,7 @@ openBooking=(event)=>
 	sessionStorage.setItem('quantity', productInfo.split('_')[2]);
 	sessionStorage.setItem('unit', productInfo.split('_')[3]);
 	sessionStorage.setItem('farmer_id', id);
-	document.getElementById('order_price').innerHTML = `&#8358;${sessionStorage.getItem('price')} per ${sessionStorage.getItem(unit)}`;
+	document.getElementById('order_price').innerHTML = `&#8358;${sessionStorage.getItem('price')} per ${sessionStorage.getItem('unit')}`;
 	//open booking screen
 	document.getElementById("place_order").style.marginLeft="0vw";
 }

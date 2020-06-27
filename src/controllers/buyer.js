@@ -186,12 +186,12 @@ export default{
             const updatedQuantity = result.quantity - quantity;
             FarmerStock.updateOne({product_name: product_name, farmer_id: farmerid}, {quantity: updatedQuantity}).then( () => {
                 sales.save().then(
-                order.save().then(data => {
-                    res.status(201).json({
-                        status: 'success',
-                        data
-                    });
-                })
+                    order.save().then(data => {
+                        res.status(201).json({
+                            status: 'success',
+                            data
+                     });
+                    })
                 )
                 .catch( error => res.status(400).json({
                     status: 'failed',

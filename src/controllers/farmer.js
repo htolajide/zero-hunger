@@ -225,39 +225,37 @@ export default{
     const name = req.body.name, unit = req.body.unit, quantity = 
     parseInt(req.body.quantity), price = req.body.price, farmerid = 
     req.cookies.farmerid, farmer = req.body.farmer, location = req.body.location;
-    let old_quantity = 0;
     // get old quantity
     FarmerStock.findOne({_id: req.params.id}).then(
-        stock => {
-            old_quantity += stock.quantity
+        response => {
+            let new_quantity = quantity + response.quantity;
+            const stock = new FarmerStock({
+                _id : req.params.id,
+                farmer_id: farmerid,
+                product_name: name,
+                unit: unit,
+                quantity: new_quantity,
+                price: price,
+                farmer: farmer,
+                location: location,
+                updated_at: new Date()
+            });
+            FarmerStock.updateOne({ _id: req.params.id}, stock).then( () => {
+                console.log(new_quantity);
+                res.status(201).json({
+                    status: 'success',
+                    message: 'Product successfully edited'
+                });
+            })
+            .catch(error => res.status(400).json({
+                status: 'failed', message: error.message})
+            )
         }
     )
     .catch(error => res.status(400).json({
         status:'failed', message: error.message
       })
     )
-    const stock = new FarmerStock({
-        _id : req.params.id,
-        farmer_id: farmerid,
-        product_name: name,
-        unit: unit,
-        quantity: old_quantity + quantity,
-        price: price,
-        farmer: farmer,
-        location: location,
-        updated_at: new Date()
-    })
-    FarmerStock.updateOne({ _id: req.params.id}, stock).then( () => {
-        console.log(old_quantity);
-        res.status(201).json({
-            status: 'success',
-            message: 'Product successfully edited'
-        });
-    })
-    .catch(error => res.status(400).json({
-        status: 'failed', message: error.message})
-    )
-
   },
   getSales: (req, res) => {
     Sales.find({ farmer_id: req.cookies.farmerid }).then(

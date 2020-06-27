@@ -603,15 +603,14 @@ var orderProduct;
 orderProduct = () => {
 	const order_btn = document.getElementById('order_btn');
 	order_btn.textContent = 'Processing...';
-	const quantity = document.getElementById('order_qty').value,
-	buyer = document.getElementById('order_name').value,
-	phone = document.getElementById('order_phone').value,
-	address = document.getElementById('order_address').value,
-	product_name = sessionStorage.getItem('product_name'),
-	price = sessionStorage.getItem('price'),
-	unit = sessionStorage.getItem('unit'),
-	farmer_id = sessionStorage.getItem('farmerid');
-	
+	const quantity = document.getElementById('order_qty').value;
+	const buyer = document.getElementById('order_name').value;
+	const phone = document.getElementById('order_phone').value;
+	const address = document.getElementById('order_address').value;
+	const product_name = sessionStorage.getItem('product_name');
+	const price = sessionStorage.getItem('price');
+	const unit = sessionStorage.getItem('unit');
+	const farmerid = sessionStorage.getItem('farmerid');
 	const postParameter = {
 		url: 'https://zero-hunger.herokuapp.com/api/v1/buyer/product/buy',
 		method: 'post',
@@ -620,7 +619,7 @@ orderProduct = () => {
 			price: price,
 			quantity: quantity,
 			unit: unit,
-			farmerid: farmer_id,
+			farmerid: farmerid,
 			buyer: buyer,
 			phone: phone,
 			address: address

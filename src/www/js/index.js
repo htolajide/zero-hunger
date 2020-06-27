@@ -180,13 +180,13 @@ decrement=(x)=>
 // new functions
 var getLocation;
 getLocation = () => {
-	axios.get('http://api.ipstack.com/check?access_key=c934a4c422466d14bb4cdcd82fa49547')
+	axios.get('https://api.ipstack.com/check?access_key=c934a4c422466d14bb4cdcd82fa49547')
 	.then( response => {
 		let location = response.data.city;
+		location === undefined ? 'Lagos' ; location
 		sessionStorage.setItem('location', location);
 	})
 	.catch(error => {
-		sessionStorage.setItem('location', 'Lagos');
 		console.log(error);
 	})
 }

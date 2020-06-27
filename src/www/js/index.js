@@ -276,7 +276,7 @@ register = () => {
 			openSellAfterRegister();
 		};
 	}).catch(error => {
-		alert(`Login Failed: ${error}`);
+		alert(error);
 		register_btn.textContent = 'Register';
 	})
 }

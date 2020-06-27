@@ -3,7 +3,6 @@ import bcrypt from 'bcrypt';
 import axios from 'axios';
 import configuration from '../config/config.json';
 import sendEmail from '../config/emailer';
-import location from './location';
 const Farmer =  require('../models/farmer');
 const FarmerStock = require('../models/farmerStock');
 const Sales = require('../models/sales');
@@ -16,7 +15,7 @@ export default{
         fullname: fullname,
         email: email,
         password: await bcrypt.hash(password, 10),
-        city: result.data.city,
+        city: city,
         created_at: new Date(),
         updated_at: new Date()
     });
@@ -228,7 +227,7 @@ export default{
     req.cookies.farmerid, farmer = req.body.farmer, location = req.body.location;
     let old_quantity = 0;
     // get old quantity
-    FarmerStock.findOne({farmer_id: req.cookies.farmerid, product_name: name}).then(
+    FarmerStock.findOne({_id: req.params.id}).then(
         stock => {
             old_quantity += stock.quantity
         }
@@ -248,7 +247,7 @@ export default{
         location: location,
         updated_at: new Date()
     })
-    FarmerStock.updateOne({ _id: req.params.id, farmer_id: farmerid }, stock).then( () => {
+    FarmerStock.updateOne({ _id: req.params.id}, stock).then( () => {
         res.status(201).json({
             status: 'success',
             message: 'Product successfully edited'

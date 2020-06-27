@@ -183,7 +183,7 @@ getLocation = () => {
 	axios.get('https://api.ipstack.com/check?access_key=c934a4c422466d14bb4cdcd82fa49547')
 	.then( response => {
 		let location = response.data.city;
-		location = location === undefined ? 'Lagos' : location
+		location = location === undefined ? 'Lagos' : location;
 		sessionStorage.setItem('location', location);
 	})
 	.catch(error => {

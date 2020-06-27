@@ -602,7 +602,7 @@ loadTraders = (event) => {
 var orderProduct;
 orderProduct = () => {
 	const order_btn = document.getElementById('order_btn');
-	order_btn.textContent = 'Processing...'
+	order_btn.textContent = 'Processing...';
 	const quantity = document.getElementById('order_qty').value,
 	buyer = document.getElementById('order_name').value,
 	phone = document.getElementById('order_phone').value,
@@ -610,7 +610,7 @@ orderProduct = () => {
 	product_name = sessionStorage.getItem('product_name'),
 	price = sessionStorage.getItem('price'),
 	unit = sessionStorage.getItem('unit'),
-	farmer_id = sessionStorage.getItem('farmer_id');
+	farmer_id = sessionStorage.getItem('farmerid');
 	
 	const postParameter = {
 		url: 'https://zero-hunger.herokuapp.com/api/v1/buyer/product/buy',

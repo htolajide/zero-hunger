@@ -14,7 +14,7 @@ body {
   -webkit-user-select: none;                  /* prevent copy paste, to allow, change 'none' to 'text' */
   background-color: #fff;
   font-family: system-ui, -apple-system, -apple-system-font, 'Segoe UI', 'Roboto', sans-serif;
-  font-size: 12px;
+  font-size: 14px;
   height: 100vh;
   margin: 0;
   padding: 0;
@@ -202,7 +202,7 @@ body {
 
 .content_box {
   width: 14vw;
-  height: 14vw;
+  min-height: 14vw;
   background: #fff;
   display: flex;
   justify-content: center;
@@ -216,7 +216,7 @@ body {
 
 .content_box_large {
   width: 43vw;
-  height: 50vh;
+  min-height: 50vh;
   background: #fff;
   display: flex;
   justify-content: center;
@@ -419,7 +419,7 @@ body {
   margin-top: -0.5vw;
 }
 
-.input_ input {
+.input_ input, .input_ select {
   outline: none;
   border: none;
   font-size: 1vw;

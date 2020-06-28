@@ -94,26 +94,26 @@
             <div class="full_page_container">
                 <div id="ordering_list" class="order_list">
                     <img src="img/food/tomato.png" class="large_image">
-                    <h1 class="title_bright">&#8358;50</h1>
+                    <h1 class="title_bright" id="order_price">&#8358;50</h1>
                     <div class="input_">
                         <img src="img/icons/remove.svg" onclick=decrement("ordered_item")>
-                        <input  type="number" placeholder="Number of item needed" id="ordered_item">
+                        <input  type="number" placeholder="Number of item needed" id="order_qty">
                         <img src="img/icons/sell.svg" onclick=increment("ordered_item")>
                     </div>
                     <div class="input_">
                         
-                        <input  type="text" placeholder="Email">
+                        <input  type="text" id="order_name" placeholder="Name">
                         
                     </div>
                     <div class="input_">
                         
-                        <input  type="number" placeholder="Mobile number">
+                        <input  type="number" id="order_phone" placeholder="Mobile number">
                         
                     </div>
                     <div class="input_">
-                        <input  type="text" placeholder="Address">
+                        <input  type="text" id="order_address" placeholder="Address">
                     </div>
-                    <button class="btn_larger">Order</button>
+                    <button class="btn_larger" id="order_btn" onclick=orderProduct()>Order</button>
                 </div>
             </div>
             
@@ -121,9 +121,9 @@
         <div class="full_page" id="select_trader">
             <div class="full_page_header">
                 <img src="img/icons/back.svg" class="icon_btn" onclick=closeTraders()>
-                <h2 class="sub_title">select a <b class="complement_three">tomato</b> trader</h2>
+                <h2 class="sub_title">select a <b class="complement_three" id="complement">tomato</b> trader</h2>
             </div>
-            <h1 class="title_bright">tomato traders in lagos</h1>
+            <h1 class="title_bright"  id="header_title">tomato traders in lagos</h1>
             <div class="full_page_container">
                 <div id="seller_list" class="full_list">
 
@@ -185,7 +185,7 @@
             
             <!-- product page -->
             <div class="content_list_column" id="product_selection" style="display:none;"> 
-                <h1 class="title_bright">Select food item</h1>
+                <h1 class="title_bright" id="head_title">Select food item</h1>
             <div class="content_list" id="product_selection_list"> 
                 
                 <div class="content_box">
@@ -212,68 +212,17 @@
                     <img src="img/food/onion.png" class="item_image">
                     <h2 class="title_small">onion</h2>
                     <button class="btn" onclick=openTraders()>select</button>
-                </div>
-                
+                </div>  
             </div>
             </div>
             <!-- sell page -->
             <div class="content_list_column" id="sell_section" style="display:none;">
-                <h1 class="title_bright">Avaliable products</h1>
+                <h1 class="title_bright" id="sell_header">Avaliable products</h1>
                 <div class="content_list" id="product_sell_list" >
-                    <div class="content_box_large">
-                        <img src="img/food/tomato.png" class="item_image">
-                        <h2 class="title_small">Tomatoes</h2>
-                        <p class="sub_title">recomended price &#8358;50</p>
-                        
-                        <div class="input_">
-                            <img src="img/icons/remove.svg" onclick=decrement("tomatoes_selling_price")>
-                            <input  type="number" placeholder="50" value="50" readonly id="tomatoes_selling_price">
-                            <img src="img/icons/sell.svg" onclick=increment("tomatoes_selling_price")>
-                        </div>
-                        <button class="btn_larger" onclick=openSignin() >Add to store</button>
-                    </div>
-                    <div class="content_box_large">
-                        <img src="img/food/pepper.png" class="item_image">
-                        <h2 class="title_small">Pepper</h2>
-                        <p class="sub_title">recomended price &#8358;50</p>
-                       
-                        <div class="input_">
-                            <img src="img/icons/remove.svg" onclick=decrement("pepper_selling_price")>
-                            
-                            <input  type="number" placeholder="50" value="50" readonly id="pepper_selling_price">
-                            <img src="img/icons/sell.svg" onclick=increment("pepper_selling_price")>
-                        </div>
-                        <button class="btn_larger" onclick=openSignin() >Add to store</button>
-                    </div>
-                    <div class="content_box_large">
-                        <img src="img/food/orange.png" class="item_image">
-                        <h2 class="title_small">orange</h2>
-                        <p class="sub_title">recomended price &#8358;50</p>
-                        
-                        <div class="input_">
-                            <img src="img/icons/remove.svg" onclick=decrement("orange_selling_price")>
-                            
-                            <input  type="number" placeholder="50" value="50" readonly id="orange_selling_price">
-                            <img src="img/icons/sell.svg" onclick=increment("orange_selling_price")>
-                        </div>
-                        <button class="btn_larger" onclick=openSignin() >Add to store</button>
-                    </div>
-                    <div class="content_box_large">
-                        <img src="img/food/onion.png" class="item_image">
-                        <h2 class="title_small">onion</h2>
-                        <p class="sub_title">recomended price &#8358;50</p>
-                        
-                        <div class="input_">
-                            <img src="img/icons/remove.svg" onclick=decrement("onion_selling_price")>
-
-                            <input  type="number" placeholder="50" value="50" readonly id="onion_selling_price">
-                            <img src="img/icons/sell.svg" onclick=increment("onion_selling_price")>
-                        </div>
-                        <button class="btn_larger" onclick=openSignin() >Add to store</button>
-                    </div>
-
+                    
                 </div>
             </div>
+            
             <!-- my store page -->
             <div class="content_list_column" id="my_store" style="display:none;"> 
                 <div class="store_head">
@@ -282,44 +231,19 @@
                     </div>
                     <h2 class="title_small" id="p_fullname" style="color:#fff;">Franklin Ejike's store</h2>
                     <p class="sub_title" id="p_email" style="color:#fff;">ejike.franklin@ymail.com</p>
-                    <p class="sub_title" id="location" style="color:#fff;">Lagos</p>
+                    <p class="sub_title" id="city" style="color:#fff;">Lagos</p>
 
                 </div>
-                <h1 class="title_bright">My products</h1>
-                <div class="content_list" id="my_store" >
-
-                <div class="content_box">
-                    <img src="img/food/tomato.png" class="item_image">
-                    <h2 class="title_small">Tomatoes</h2>
-                    <button class="btn" onclick="" style="background:#d14b72;">remove</button>
+                <h1 class="title_bright" id="store_header">My Products</h1>
+                <div class="content_list" id="my_products" >
                 </div>
-                <div class="content_box">
-                    <img src="img/food/pepper.png" class="item_image">
-                    <h2 class="title_small">Pepper</h2>
-                    <button class="btn" onclick="" style="background:#d14b72;">remove</button>
+                <!-- update product page-->
+                <div class="content_list_column" id="update_product" style="display:none;">
+                    <h1 class="title_bright" id="sell_header">Make Your changes</h1>
+                    <div class="content_list" id="product_update_form" >
+                    
+                    </div>
                 </div>
-                <div class="content_box">
-                    <img src="img/food/tomato.png" class="item_image">
-                    <h2 class="title_small">Tomatoes</h2>
-                    <button class="btn" onclick="" style="background:#d14b72;">remove</button>
-                </div>
-                <div class="content_box">
-                    <img src="img/food/pepper.png" class="item_image">
-                    <h2 class="title_small">Pepper</h2>
-                    <button class="btn" onclick="" style="background:#d14b72;">remove</button>
-                </div>
-                <div class="content_box">
-                    <img src="img/food/tomato.png" class="item_image">
-                    <h2 class="title_small">Tomatoes</h2>
-                    <button class="btn" onclick="" style="background:#d14b72;">remove</button>
-                </div>
-                <div class="content_box">
-                    <img src="img/food/pepper.png" class="item_image">
-                    <h2 class="title_small">Pepper</h2>
-                    <button class="btn" onclick="" style="background:#d14b72;">remove</button>
-                </div>
-                </div>
-                
             </div>
             <div class="content_list_column" id="more_selection" style="display:none;"> 
                 <h1 class="title_bright">More</h1>
@@ -347,8 +271,6 @@
                 </div>
             </div>
     </div>
-
-
 
     <script type="text/javascript" src="cordova.js"></script>
     <script type="text/javascript" src="js/index.js"></script>

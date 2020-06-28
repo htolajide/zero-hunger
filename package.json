@@ -41,6 +41,9 @@
       "@babel/plugin-transform-regenerator",
       "@babel/plugin-syntax-bigint",
       "@babel/plugin-transform-runtime"
+    ],
+    "ignore": [
+      "./src/www"
     ]
   },
   "devDependencies": {

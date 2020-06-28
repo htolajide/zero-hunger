@@ -6,6 +6,7 @@ import sendEmail from '../config/emailer';
 import location from './location';
 const Buyer =  require('../models/buyer');
 const Sales = require('../models/sales');
+const Order = require('../models/order');
 const FarmerStock = require('../models/farmerStock');
 
 export default{
@@ -158,28 +159,40 @@ export default{
 	);
   },
   buyProduct: (req, res) => {
-    const name = req.body.name, unit = req.body.unit, quantity = 
-    req.body.quantity, price = req.body.price, farmerid = req.body.farmerid;
+    const product_name = req.body.product_name, unit = req.body.unit, quantity = 
+    req.body.quantity, price = req.body.price, farmerid = req.body.farmerid,
+    buyer = req.body.buyer, phone = req.body.phone, address = req.body.address;
     const sales = new Sales({
-        buyer_id: req.cookies.buyerid,
         farmer_id: farmerid,
-        product_name: name,
+        buyer_name: buyer,
+        buyer_phone: phone,
+        product_name: product_name,
         unit: unit,
         quantity: quantity,
+        price: price
+    });
+    const order = new Order({
+        buyer_name: buyer,
+        phone: phone,
+        address: address,
+        product_name: product_name,
+        quantity: quantity,
         price: price,
-        token: req.cookies.token
+        unit: unit
     })
-    FarmerStock.findOne({product_name: name, farmer_id: farmerid}).then(
+    FarmerStock.findOne({product_name: product_name, farmer_id: farmerid}).then(
         result => {
             if (result.quantity < quantity) return res.status(400).json({ status: 'failed', message:'quantity not sufficient'});
             const updatedQuantity = result.quantity - quantity;
-            FarmerStock.updateOne({product_name: name, farmer_id: farmerid}, {quantity: updatedQuantity}).then( () => {
-                sales.save().then( (data) => {
-                    res.status(201).json({
-                        status: 'success',
-                        data
-                    });
-                })
+            FarmerStock.updateOne({product_name: product_name, farmer_id: farmerid}, {quantity: updatedQuantity}).then( () => {
+                sales.save().then(
+                    order.save().then(data => {
+                        res.status(201).json({
+                            status: 'success',
+                            data
+                     });
+                    })
+                )
                 .catch( error => res.status(400).json({
                     status: 'failed',
                     message: error.message
@@ -204,5 +217,16 @@ export default{
           status:'failed', message: error.message
         })
       )
-  }
+  },
+  getAllOrders: (req, res) => {
+    Order.find().then(
+        order => {
+            res.status(200).json({order})
+        }
+    )
+    .catch(error => res.status(400).json({
+        status:'failed', message: error.message
+      })
+    )
+  },
 }

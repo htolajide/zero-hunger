@@ -6,6 +6,7 @@ const farmerStockSchema = mongoose.Schema({
   unit: { type: String, required: true },
   quantity: { type: Number, required: true },
   price: { type: Number, required: true },
+  farmer: {type: String, required: true },
   location: {type: String, required: true },
   created_at: { type: Date, required: true, default: new Date()},
   updated_at: {type: Date, required: true, default: new Date()}

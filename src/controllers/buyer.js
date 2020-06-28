@@ -217,5 +217,16 @@ export default{
           status:'failed', message: error.message
         })
       )
-  }
+  },
+  getAllOrders: (req, res) => {
+    Order.find().then(
+        order => {
+            res.status(200).json({order})
+        }
+    )
+    .catch(error => res.status(400).json({
+        status:'failed', message: error.message
+      })
+    )
+  },
 }

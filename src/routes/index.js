@@ -18,7 +18,7 @@ export default (app) => {
   app.get('/api/v1/show/products', farmer.showProducts); // api for advertising product
   app.delete('/api/v1/farmer/:id/delete', farmer.deleteOne); // API route for deleting a farmer
   app.delete('/api/v1/farmer/all/delete', farmer.deleteAll); // API route for deleting all famer
-  app.delete('/api/v1/farmer/product/delete', farmer.deleteProduct); // API route for deleting all famer
+  app.delete('/api/v1/farmer/:farmerid/product/:productName/delete', farmer.deleteOneProduct); // API route for deleting all famer
   //app.delete('/api/v1/farmer/all/stock/delete', farmer.deleteStock); // API route for deleting all stock
   app.post('/api/v1/farmer/product/add', authenticator, farmer.addProduct)
   app.put('/api/v1/farmer/profile/edit', validator.auth, authenticator, farmer.editFarmer) //Api route for edit profile
@@ -41,4 +41,6 @@ export default (app) => {
   app.get('/api/v1/units/', unit.getUnit);
   app.get('/api/v1/stock/all', farmer.getStock); // all stock
   app.get('/api/v1/:location/:product/sellers', farmer.getSellers);
+  app.get('/api/v1/sales/all', farmer.getAllSales);
+  app.get('/api/v1/orders/all', buyer.getAllOrders);
 };

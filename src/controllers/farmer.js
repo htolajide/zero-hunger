@@ -203,8 +203,8 @@ export default{
         })
       )
   },
-  deleteProduct: (req, res) => {
-    FarmerStock.deleteOne({farmer_id: req.cookies.farmerid, product_name: req.cookies.product_name}).then(
+  deleteOneProduct: (req, res) => {
+    FarmerStock.deleteOne({farmer_id: req.params.farmerid, product_name: req.params.productName}).then(
         res.status(200).json({status: 'success', message: 'product delete from stock'})
     )
     .catch(error => res.status(400).json({
@@ -259,6 +259,17 @@ export default{
   },
   getSales: (req, res) => {
     Sales.find({ farmer_id: req.cookies.farmerid }).then(
+        stock => {
+            res.status(200).json({stock})
+        }
+    )
+    .catch(error => res.status(400).json({
+        status:'failed', message: error.message
+      })
+    )
+  },
+  getAllSales: (req, res) => {
+    Sales.find().then(
         stock => {
             res.status(200).json({stock})
         }

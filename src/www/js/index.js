@@ -185,6 +185,7 @@ getLocation = () => {
 		let location = response.data.city;
 		location = location === undefined ? 'Lagos' : location;
 		sessionStorage.setItem('location', location);
+		console.log(location)
 	})
 	.catch(error => {
 		console.log(error);
@@ -196,6 +197,7 @@ isLoggedin = () => {
 	if(sessionStorage.getItem('token') !== null ) return true;
 	return false;
 }
+
 var openSellAfterSignin;
 openSellAfterSignin=()=>
 {
@@ -310,11 +312,8 @@ loadStore = () => {
 				const lower_name = product.product_name.split(' ').join('').toLowerCase();
 				if(product.quantity === 0) {
 					const deleteOptions = {
-						url: 'https://zero-hunger.herokuapp.com/api/v1/farmer/product/delete',
+						url: `https://zero-hunger.herokuapp.com/api/v1/farmer/${product.farmer_id}/product/${product.product_name}/delete`,
 						method: 'delete',
-						headers: {
-							cookies: `farmerid=${sessionStorage.getItem('farmerid')}; product_name=${product.product_name}`
-						}
 				  };
 					axios.request(deleteOptions).then().catch(error => alert(error))
 				}
@@ -521,14 +520,13 @@ updateProduct = (event) => {
 	const patchOptions = {
 		url: `https://zero-hunger.herokuapp.com/api/v1/farmer/product/${product_id}/edit`,
 		method: 'patch',
-		data: { name: name, price: price, quantity: quantity, unit: unit, farmer: farmer,location: location },
+		data: { name: name, price: price, quantity: quantity, unit: unit, farmer: farmer, location: location },
 		headers: { 
 			cookies: `farmerid = ${sessionStorage.getItem('farmerid')}; token=${sessionStorage.getItem('token')}`
 		}
 	}
 	axios.request(patchOptions).then(
 		feedback => {
-			console.log('Patch Meassge', feedback.data);
 			submit_btn.textContent = 'Submit';
 			alert(feedback.data.message);
 			nav("Mystore");

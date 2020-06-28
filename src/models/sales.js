@@ -8,8 +8,8 @@ const saleSchema = mongoose.Schema({
   unit: { type: String, required: true },
   quantity: { type: Number, required: true },
   price: { type: Number, required: true },
-  created_at: { type: Date, required: true, default: new Date()},
-  updated_at: {type: Date, required: true, default: new Date()}
+  created_at: { type: Date, required: true, default: new Date() },
+  updated_at: { type: Date, required: true, default: new Date() }
 });
 
 module.exports = mongoose.model('Sales', saleSchema);

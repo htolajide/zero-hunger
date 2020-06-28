@@ -584,9 +584,9 @@ loadTraders = (event) => {
 					<div class="pro_pic">
 						${trader.farmer.charAt(0)}
 					</div>
-					<input type="hidden" id="${trader.farmerid}" value="${trader.product_name}_${trader.price}_${trader.quantity}_${trader.unit}"/>
+					<input type="hidden" id="${trader.farmer_id}" value="${trader.product_name}_${trader.price}_${trader.quantity}_${trader.unit}"/>
 					<h2 class="title_small">${trader.farmer}</h2>
-					<button class="btn" id="${trader.farmerid}_btn" onclick=openBooking(event)>&#8358; ${trader.price}/${trader.unit}</button>
+					<button class="btn" id="${trader.farmer_id}_btn" onclick=openBooking(event)>&#8358; ${trader.price}/${trader.unit}</button>
 				</div>`
 			})
 			} else { content = 'Trader(s) not available'}	
@@ -610,7 +610,7 @@ orderProduct = () => {
 	const product_name = sessionStorage.getItem('product_name');
 	const price = sessionStorage.getItem('price');
 	const unit = sessionStorage.getItem('unit');
-	const farmerid = sessionStorage.getItem('farmerid');
+	const farmerid = sessionStorage.getItem('farmer_id');
 	const postParameter = {
 		url: 'https://zero-hunger.herokuapp.com/api/v1/buyer/product/buy',
 		method: 'post',
@@ -625,6 +625,7 @@ orderProduct = () => {
 			address: address
 		}
 	}
+	console.log(postParameter);
 	axios.request(postParameter).then( result => {
 		if (result.data.status === 'success') alert('Order successful');
 		order_btn.textContent = 'Order';

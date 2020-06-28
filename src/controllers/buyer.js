@@ -172,11 +172,11 @@ export default{
         price: price
     });
     const order = new Order({
-        name: buyer,
+        buyer_name: buyer,
         phone: phone,
         address: address,
         product_name: product_name,
-        product_qty: quantity,
+        quantity: quantity,
         price: price,
         unit: unit
     })

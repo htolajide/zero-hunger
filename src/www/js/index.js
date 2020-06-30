@@ -648,7 +648,6 @@ orderProduct = () => {
 					farmer_email: result.data.email
 				}
 			}
-			console.log(postParameter);
 			axios.request(postParameter).then( result => {
 				if (result.data.status === 'success') alert('Order successful');
 					order_btn.textContent = 'Order';
@@ -661,7 +660,10 @@ orderProduct = () => {
 		}
 	)
 	.catch(
-		error => alert(error)
+		error => {
+			alert(error);
+			order_btn.textContent = 'Order';
+		}
 	);
 }
 var inits;

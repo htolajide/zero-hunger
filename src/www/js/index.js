@@ -238,7 +238,6 @@ login = () => {
 		url: url,
 		body: { email: email, password: password },
 	}
-	console.log(parameter);
 	const body = { email: email, password: password };
 	signin_btn.textContent = 'signing in...';
 	axios.post(url, body, {credentials: 'include'}).then(response => {

@@ -1,9 +1,9 @@
-var Team = {
+/*var Team = {
     name:"Team-031",
     project:"Zero Hunger",
-    solution:"Unknown",
+    solution:"A price controlled online market (Farm Food)",
     members:9,
-};
+};*/
 var nav;
 nav=(x)=>
 {
@@ -149,6 +149,24 @@ loader=(x)=>
 	//call the fucntion loader(x) when needed.
 	document.getElementById("loading_page").style.marginLeft=x+"vw";
 }
+var alert;
+alert=(x)=>
+{
+	//custom alert
+	document.getElementById("alert_text").innerHTML=x;
+	document.getElementById("alert_page").style.bottom="0";
+	loader(0);
+
+}
+var hideAlert;
+hideAlert=()=>
+{
+	//custom alert
+	document.getElementById("alert_text").innerHTML="";
+	document.getElementById("alert_page").style.bottom="-100vh";
+	loader(100);
+
+}
 var increment;
 increment=(x)=>
 {
@@ -180,15 +198,16 @@ decrement=(x)=>
 // new functions
 var getLocation;
 getLocation = () => {
-	axios.get('https://api.ipstack.com/check?access_key=c934a4c422466d14bb4cdcd82fa49547')
+	axios.get('http://api.ipstack.com/check?access_key=c934a4c422466d14bb4cdcd82fa49547')
 	.then( response => {
 		let location = response.data.city;
+		//console.log(location);
 		location = location === undefined ? 'Lagos' : location;
 		sessionStorage.setItem('location', location);
-		console.log(location)
+		//console.log(location)
 	})
 	.catch(error => {
-		console.log(error);
+		//console.log(error);
 	})
 }
 getLocation();
@@ -218,6 +237,7 @@ login = () => {
 		url: url,
 		body: { email: email, password: password },
 	}
+	console.log(parameter);
 	const body = { email: email, password: password };
 	signin_btn.textContent = 'signing in...';
 	axios.post(url, body, {credentials: 'include'}).then(response => {
@@ -298,12 +318,12 @@ loadStore = () => {
 		  url: 'https://zero-hunger.herokuapp.com/api/v1/farmer/products',
 		  method: 'get',
 		  headers: {
-			  cookies: `farmerid=${sessionStorage.getItem('farmerid')}; token=${sessionStorage.getItem('token')}`
+		  	cookies: `farmerid=${sessionStorage.getItem('farmerid')}; token=${sessionStorage.getItem('token')}`
 		  }
 	};
 	header.textContent = 'Loading products...'
 	// checking for cookies
-	console.log('cookies', document.cookie);
+	//console.log('cookies', document.cookie);
 	axios.request(requestOptions)
 	.then( response => {
 		let content = '';
@@ -314,11 +334,11 @@ loadStore = () => {
 					const deleteOptions = {
 						url: `https://zero-hunger.herokuapp.com/api/v1/farmer/${product.farmer_id}/product/${product.product_name}/delete`,
 						method: 'delete',
-				  };
+				};
 					axios.request(deleteOptions).then().catch(error => alert(error))
 				}
 				const child = `<div class="content_box">
-				<img src="img/food/tomato.png" class="item_image">
+				<img src="img/food/${tempName}.png" class="item_image">
 				<h2 class="title_small" id="${lower_name}_name">${product.product_name}</h2>
 				<h3 class="sub_title" id="${lower_name}_price">price &#8358;${product.price}</h3>
 				<h3 class="sub_title" id="${lower_name}_qty_unit">${product.quantity} ${product.unit}</h3>
@@ -335,7 +355,7 @@ loadStore = () => {
 	})
 	.catch(error => alert(error))
 }
-
+var tempName;
 var loadSellProducts;
 loadSellProducts = () => {
 	const header = document.querySelector('#sell_header');
@@ -348,20 +368,19 @@ loadSellProducts = () => {
 			tempName = item.name.replace(' ','').toLowerCase();
 			content += `
 			<div class="content_box_large">
-			<img src="img/food/tomato.png" class="item_image">
+			<img src="img/food/${tempName}.png" class="item_image">
 			<h2 class="title_small" id="${tempName}">${item.name}</h2>
-			<p class="sub_title">recomended price &#8358;50</p>
-			<div class="input_">
-				<img src="img/icons/remove.svg" onclick=decrement("${tempName}_selling_price")>
-				<input  type="number" placeholder="50" value="50" id="${tempName}_selling_price">
-				<img src="img/icons/sell.svg" onclick=increment("${tempName}_selling_price")>
-			</div>
-			<p class="sub_title">Quantity</p>
+			<p class="sub_title" style="text-transform: none;">Recomended price &#8358;{unknown}</p>
 			<div class="input_" >
 				<input type="number"  id="${tempName}_quantity" placeholder="Quantity" />
 			</div>
 			<div class="input_">
 				<select class="unit" style="{ width: 100%; height:100%; border: no-border}" id="${tempName}_unit"><option disabled selected>Select Unit</option> </select>
+			</div>
+			<div class="input_">
+				<img src="img/icons/remove.svg" onclick=decrement("${tempName}_selling_price")>
+				<input  type="number" placeholder="Price"id="${tempName}_selling_price">
+				<img src="img/icons/sell.svg" onclick=increment("${tempName}_selling_price")>
 			</div>
 			<button class="btn_larger" id="${tempName}_btn" onclick=addStore(event) >Add to store</button>
 			</div>`;
@@ -406,7 +425,7 @@ addStore = (event) => {
 		headers: {
 			cookies: `farmerid=${sessionStorage.getItem('farmerid')}; token=${sessionStorage.getItem('token')}`
 		}
-	  };
+	};
 	  const postOptions = {
 		url: 'https://zero-hunger.herokuapp.com/api/v1/farmer/product/add',
 		method: 'post',
@@ -415,8 +434,9 @@ addStore = (event) => {
 	} 
 	
 	axios.request(requestOptions)
-  	.then( response => {
-		const myStock = response.data.stock;
+  	.then(
+  		response => {
+  		const myStock = response.data.stock;
 		if (myStock.length > 0) {
 			for(let i=0; i<myStock.length; i++) {
 				if(myStock[i].product_name === item_name){	
@@ -456,7 +476,7 @@ openUpdatePage = () =>
 	const container = document.getElementById('product_update_form');
 	const content = `
 	<div class="content_box_large">
-	<img src="img/food/tomato.png" class="item_image">
+	<img src="img/food/${tempName}.png" class="item_image">
 	<h2 class="title_small" id="${input_name}_update">${name}</h2>
 	<p class="sub_title">recomended price &#8358;50</p>
 	<div class="input_">
@@ -546,9 +566,10 @@ loadBuy = () => {
 		const container = document.getElementById('product_selection_list');
 		let content = '';
 		result.data.map( product => {
+			tempName = product.name.replace(' ','').toLowerCase();
 			content += `
 			<div class="content_box">
-                    <img src="img/food/tomato.png" class="item_image">
+                    <img src="img/food/${tempName}.png" class="item_image">
                     <h2 class="title_small">${product.name}</h2>
                     <button class="btn" id="${product.name}" onclick=loadTraders(event)>select</button>
             </div>`;
@@ -634,3 +655,35 @@ orderProduct = () => {
 		order_btn.textContent = 'Order';
 	})
 }
+var inits;
+inits=()=>
+{
+	var x=1
+	if(x===1)
+	{
+		return 0;
+	}
+	else
+	{
+		//list of all functions
+		closexIndex();
+		openxIndex();
+		closeSignin();
+		closeRegister();
+		openRegister();
+		closeTraders();
+		closeBooking();
+		openBooking();
+		hideAlert();
+		increment();
+		decrement();
+		login();
+		register();
+		addStore();
+		openUpdatePage();
+		updateProduct();
+		loadTraders();
+		orderProduct();
+	}
+}
+inits();

@@ -63,7 +63,6 @@ body {
   position: fixed;
   padding: 0;
   margin: 0;
-
 }
 
 .header {
@@ -107,12 +106,11 @@ body {
 .menu_box_icon {
   width: 8vw;
   height: 4vh;
-
 }
 
 .menu_box_text {
   font-size: 3.5vw;
-  margin: 0vh;
+  margin: 0;
   color: #999;
 }
 
@@ -132,11 +130,12 @@ body {
   background: #4b72d1;
   text-align: center;
   outline: none;
-  border:none;
+  border: none;
   font-size: 3vw;
   color: #fff;
   border-radius: 10vw;
   transition: opacity 0.1s;
+  margin-top: 4vw;
 }
 
 .btn:active {
@@ -150,7 +149,7 @@ body {
   background: #4b72d1;
   text-align: center;
   outline: none;
-  border:none;
+  border: none;
   font-size: 3vw;
   color: #fff;
   border-radius: 10vw;
@@ -209,6 +208,8 @@ body {
   border-bottom: solid 0.5vw #eee;
   margin: 1vw;
   border-radius: 1vh;
+  padding-top: 4vw;
+  padding-bottom: 4vw;
 }
 
 .content_box_large {
@@ -222,6 +223,8 @@ body {
   border-bottom: solid 0.5vw #eee;
   margin: 1vw;
   border-radius: 1vh;
+  padding-top: 5vh;
+  padding-bottom: 5vh;
 }
 
 .title_bright {
@@ -243,7 +246,7 @@ body {
   color: #aaa;
   text-transform: lowercase;
   padding: 0.5vw;
-  margin: 0vw
+  margin: 0;
 }
 
 .full_page {
@@ -254,6 +257,15 @@ body {
   z-index: 100;
   transition: margin 0.5s;
 }
+.alert_page {
+  width: 100vw;
+  min-height: 20vh;
+  background: none;
+  position: fixed;
+  z-index: 100;
+  transition: margin 1s;
+  bottom: -100vh;
+}
 
 #select_trader {
   z-index: 101;
@@ -261,21 +273,21 @@ body {
 }
 
 #place_order {
-  z-index: 102; 
+  z-index: 102;
   margin-left: 100vw;
 }
 
 #index_page {
-  z-index: 200; 
+  z-index: 200;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  background: #fff;  
+  background: #fff;
 }
 
 #register_page {
-  z-index: 202; 
+  z-index: 202;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -285,25 +297,32 @@ body {
 }
 
 #sign_page {
-  z-index: 201; 
+  z-index: 201;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
   background: #fff;
   margin-left: 100vw;
-  
 }
 
 #loading_page {
-  z-index: 100; 
+  z-index: 100;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
   background: #fff;
   margin-left: 100vw;
-  
+}
+#alert_page {
+  z-index: 300;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  background: none;
+  margin-left: 0vw;
 }
 
 .full_page_header {
@@ -359,7 +378,9 @@ body {
   align-items: center;
   flex-direction: column;
   border-bottom: solid 0.5vw #eee;
-  margin:1vw;
+  margin: 1vw;
+  padding-top: 2vw;
+  padding-bottom: 2vw;
 }
 
 .icon_btn {
@@ -390,7 +411,7 @@ body {
   font-size: 3.5vw;
   text-transform: lowercase;
   padding: 0.5vw;
-  margin: 0vw;
+  margin: 0;
 }
 
 .input_ {
@@ -406,7 +427,7 @@ body {
   justify-content: space-around;
   align-items: center;
   background: #fff;
-  border-radius: 10vw;
+  border-radius: 1vw;
   border-bottom: solid #eee 0.2vw;
 }
 
@@ -415,7 +436,8 @@ body {
   height: 8vw;
 }
 
-.input_ input, .input_ select {
+.input_ input,
+.input_ select {
   outline: none;
   border: none;
   font-size: 3vw;

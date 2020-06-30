@@ -45,6 +45,10 @@
 
         <img src="img/hello.gif" class="welcome_image">
     </div>
+    <div class="alert_page" id="alert_page">
+        <p class="sub_title" id="alert_text"></p>
+        <button class="btn_larger" onclick=hideAlert()>Close</button>
+    </div>
     <div class="full_page" id="loading_page">
         <img src="img/loading.gif" class="welcome_image">
     </div>
@@ -94,7 +98,7 @@
             <div class="full_page_container">
                 <div id="ordering_list" class="order_list">
                     <img src="img/food/tomato.png" class="large_image">
-                    <h1 class="title_bright" id="order_price">&#8358;50</h1>
+                    <h1 class="title_bright" id="order_price" style="margin:0;">&#8358;50</h1>
                     <div class="input_">
                         <img src="img/icons/remove.svg" onclick=decrement("ordered_item")>
                         <input  type="number" placeholder="Number of item needed" id="order_qty">
@@ -186,33 +190,7 @@
             <!-- product page -->
             <div class="content_list_column" id="product_selection" style="display:none;"> 
                 <h1 class="title_bright" id="head_title">Select food item</h1>
-            <div class="content_list" id="product_selection_list"> 
-                
-                <div class="content_box">
-                    <img src="img/food/tomato.png" class="item_image">
-                    <h2 class="title_small">Tomatoes</h2>
-                    <button class="btn" onclick=openTraders()>select</button>
-                </div>
-                <div class="content_box">
-                    <img src="img/food/snail.png" class="item_image">
-                    <h2 class="title_small">snail</h2>
-                    <button class="btn" onclick=openTraders()>select</button>
-                </div>
-                <div class="content_box">
-                    <img src="img/food/pepper.png" class="item_image">
-                    <h2 class="title_small">Pepper</h2>
-                    <button class="btn" onclick=openTraders()>select</button>
-                </div>
-                <div class="content_box">
-                    <img src="img/food/orange.png" class="item_image">
-                    <h2 class="title_small">orange</h2>
-                    <button class="btn" onclick=openTraders()>select</button>
-                </div>
-                <div class="content_box">
-                    <img src="img/food/onion.png" class="item_image">
-                    <h2 class="title_small">onion</h2>
-                    <button class="btn" onclick=openTraders()>select</button>
-                </div>  
+            <div class="content_list" id="product_selection_list">   
             </div>
             </div>
             <!-- sell page -->

@@ -630,36 +630,39 @@ orderProduct = () => {
 	const price = sessionStorage.getItem('price');
 	const unit = sessionStorage.getItem('unit');
 	const farmerid = sessionStorage.getItem('farmer_id');
-	let email = '';
+	// the email and post the reques
 	axios.get(`https://zero-hunger.herokuapp.com/api/v1/farmer/email/${farmerid}`).then(
 		result => {
-			email = result.data.email
-		}).catch(error => alert(error));
-	const postParameter = {
-		url: 'https://zero-hunger.herokuapp.com/api/v1/buyer/product/buy',
-		method: 'post',
-		data: {
-			product_name: product_name,
-			price: price,
-			quantity: quantity,
-			unit: unit,
-			farmerid: farmerid,
-			buyer: buyer,
-			phone: phone,
-			address: address,
-			farmer_email: email
+			const postParameter = {
+				url: 'https://zero-hunger.herokuapp.com/api/v1/buyer/product/buy',
+				method: 'post',
+				data: {
+					product_name: product_name,
+					price: price,
+					quantity: quantity,
+					unit: unit,
+					farmerid: farmerid,
+					buyer: buyer,
+					phone: phone,
+					address: address,
+					farmer_email: result.data.email
+				}
+			}
+			console.log(postParameter);
+			axios.request(postParameter).then( result => {
+				if (result.data.status === 'success') alert('Order successful');
+					order_btn.textContent = 'Order';
+					sessionStorage.clear();
+			})
+			.catch(error => {
+			alert (error);
+			order_btn.textContent = 'Order';
+			})
 		}
-	}
-	console.log(postParameter);
-	axios.request(postParameter).then( result => {
-		if (result.data.status === 'success') alert('Order successful');
-		order_btn.textContent = 'Order';
-		sessionStorage.clear();
-	})
-	.catch(error => {
-		alert (error);
-		order_btn.textContent = 'Order';
-	})
+	)
+	.catch(
+		error => alert(error)
+	);
 }
 var inits;
 inits=()=>

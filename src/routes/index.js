@@ -23,6 +23,7 @@ export default (app) => {
   app.post('/api/v1/farmer/product/add', authenticator, farmer.addProduct)
   app.put('/api/v1/farmer/profile/edit', validator.auth, authenticator, farmer.editFarmer) //Api route for edit profile
   app.get('/api/v1/farmer/products', authenticator, farmer.getProducts);
+  app.get('/api/v1/farmer/email/:farmerid', farmer.getEmail); // get farmer email
   app.get('/api/v1/farmer/sales', authenticator, farmer.getSales)
   app.patch('/api/v1/farmer/product/:id/edit', authenticator, farmer.editProduct);
   app.post('/api/v1/buyer/signup', validator.auth, buyer.signup); // API route for buyer to signup

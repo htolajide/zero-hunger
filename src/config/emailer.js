@@ -11,12 +11,12 @@ const transporter = nodemailer.createTransport({
     }
 });
 
-const sendEmail = async (email) => {
+const sendEmail = async (email, message) => {
     const mailOptions = {
-        from: ' "Zero Hunger" taofeekhammed@gmail.com',
+        from: ' "Food Farm" taofeekhammed@gmail.com',
         to: email,
-        subject: 'Sending Email using Node.js',
-        text: 'Your accout is succesfully created at Zero Hunger'
+        subject: 'Food Farm Notification',
+        text: message
     };
     try{
         await transporter.sendMail(mailOptions, (error, info) => {

@@ -208,6 +208,7 @@ getLocation = () => {
 	})
 	.catch(error => {
 		//console.log(error);
+		sessionStorage.setItem('location', 'Lagos');
 	})
 }
 getLocation();
@@ -338,7 +339,7 @@ loadStore = () => {
 					axios.request(deleteOptions).then().catch(error => alert(error))
 				}
 				const child = `<div class="content_box">
-				<img src="img/food/${tempName}.png" class="item_image">
+				<img src="img/food/${lower_name}.png" class="item_image">
 				<h2 class="title_small" id="${lower_name}_name">${product.product_name}</h2>
 				<h3 class="sub_title" id="${lower_name}_price">price &#8358;${product.price}</h3>
 				<h3 class="sub_title" id="${lower_name}_qty_unit">${product.quantity} ${product.unit}</h3>
@@ -355,7 +356,6 @@ loadStore = () => {
 	})
 	.catch(error => alert(error))
 }
-var tempName;
 var loadSellProducts;
 loadSellProducts = () => {
 	const header = document.querySelector('#sell_header');
@@ -365,7 +365,7 @@ loadSellProducts = () => {
 	axios.get('https://zero-hunger.herokuapp.com/api/v1/products')
 	.then(response => {
 		response.data.map(item =>{
-			tempName = item.name.replace(' ','').toLowerCase();
+			const tempName = item.name.replace(' ','').toLowerCase();
 			content += `
 			<div class="content_box_large">
 			<img src="img/food/${tempName}.png" class="item_image">
@@ -476,7 +476,7 @@ openUpdatePage = () =>
 	const container = document.getElementById('product_update_form');
 	const content = `
 	<div class="content_box_large">
-	<img src="img/food/${tempName}.png" class="item_image">
+	<img src="img/food/${input_name}.png" class="item_image">
 	<h2 class="title_small" id="${input_name}_update">${name}</h2>
 	<p class="sub_title">recomended price &#8358;50</p>
 	<div class="input_">
@@ -566,7 +566,7 @@ loadBuy = () => {
 		const container = document.getElementById('product_selection_list');
 		let content = '';
 		result.data.map( product => {
-			tempName = product.name.replace(' ','').toLowerCase();
+			const tempName = product.name.replace(' ','').toLowerCase();
 			content += `
 			<div class="content_box">
                     <img src="img/food/${tempName}.png" class="item_image">
@@ -630,6 +630,11 @@ orderProduct = () => {
 	const price = sessionStorage.getItem('price');
 	const unit = sessionStorage.getItem('unit');
 	const farmerid = sessionStorage.getItem('farmer_id');
+	let email = '';
+	axios.get(`https://zero-hunger.herokuapp.com/api/v1/farmer/email/${farmerid}`).then(
+		result => {
+			email = result.data.email
+		}).catch(error => alert(error));
 	const postParameter = {
 		url: 'https://zero-hunger.herokuapp.com/api/v1/buyer/product/buy',
 		method: 'post',
@@ -641,7 +646,8 @@ orderProduct = () => {
 			farmerid: farmerid,
 			buyer: buyer,
 			phone: phone,
-			address: address
+			address: address,
+			farmer_email: email
 		}
 	}
 	console.log(postParameter);

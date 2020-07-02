@@ -1,3 +1,5 @@
+const { send } = require("process");
+
 /*var Team = {
     name:"Team-031",
     project:"Zero Hunger",
@@ -293,6 +295,7 @@ register = () => {
 			} else {
 				alert('Sorry! No Web Storage support.');
 			}
+			sendEmail(responseData.userData.email, `Your account is successfully created at Food Farm`);
 			alert('Registration Successful');
 			register_btn.textContent = 'Register';
 			openSellAfterRegister();
@@ -648,7 +651,11 @@ orderProduct = () => {
 				}
 			}
 			axios.request(postParameter).then( result => {
-				if (result.data.status === 'success') alert('Order successful');
+				if (result.data.status === 'success') {
+					sendEmail(farmer_email, `${buyer} with phone number ${phone} and address ${address} just order for ${quantity} 
+                	${unit} of ${product_name} from yor store on Food Farm`);
+					alert('Order successful');
+				}
 					order_btn.textContent = 'Order';
 					sessionStorage.clear();
 			})
@@ -663,6 +670,20 @@ orderProduct = () => {
 			alert(error);
 			order_btn.textContent = 'Order';
 		}
+	);
+}
+var sendEmail;
+sendEmail = (email, message) => {
+	Email.send({
+	Host: "smtp.gmail.com",
+	Username : "taofeekhammed@gmail.com",
+	Password : "olajide4me",
+	To : email,
+	From : "Food Farm",
+	Subject : "Food Farm Notification",
+	Body : message,
+	}).then(
+		message => alert("Notification sent successfully")
 	);
 }
 var inits;
@@ -694,6 +715,7 @@ inits=()=>
 		updateProduct();
 		loadTraders();
 		orderProduct();
+		sendEmail();
 	}
 }
 inits();

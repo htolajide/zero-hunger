@@ -1,4 +1,3 @@
-const { send } = require("process");
 
 /*var Team = {
     name:"Team-031",
@@ -295,7 +294,7 @@ register = () => {
 			} else {
 				alert('Sorry! No Web Storage support.');
 			}
-			sendEmail(responseData.userData.email, `Your account is successfully created at Food Farm`);
+			sendEmail(responseData.userData.email, `Your account is successfully created at Food Farm`, 'Registration successful');
 			alert('Registration Successful');
 			register_btn.textContent = 'Register';
 			openSellAfterRegister();
@@ -652,12 +651,11 @@ orderProduct = () => {
 			}
 			axios.request(postParameter).then( result => {
 				if (result.data.status === 'success') {
-					sendEmail(farmer_email, `${buyer} with phone number ${phone} and address ${address} just order for ${quantity} 
-                	${unit} of ${product_name} from yor store on Food Farm`);
+					sendEmail(result.data.email, `${buyer} with phone number ${phone} and address ${address} just order for ${quantity} 
+                	${unit} of ${product_name} from yor store on Food Farm`, 'Order Successful');
 					alert('Order successful');
 				}
 					order_btn.textContent = 'Order';
-					sessionStorage.clear();
 			})
 			.catch(error => {
 			alert (error);
@@ -673,18 +671,19 @@ orderProduct = () => {
 	);
 }
 var sendEmail;
-sendEmail = (email, message) => {
+sendEmail = (email, message, feedback) => {
 	Email.send({
-	Host: "smtp.gmail.com",
+	Host: "smtp.elasticemail.com",
 	Username : "taofeekhammed@gmail.com",
-	Password : "olajide4me",
+	Password : "C806D0384E9AF144CD67CFCE5927F96BAEA3",
+	port: 2525,
 	To : email,
 	From : "Food Farm",
 	Subject : "Food Farm Notification",
 	Body : message,
 	}).then(
-		message => alert("Notification sent successfully")
-	);
+		message => alert(feedback)
+	).catch(error => alert(error))
 }
 var inits;
 inits=()=>

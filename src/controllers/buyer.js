@@ -188,8 +188,8 @@ export default{
             FarmerStock.updateOne({product_name: product_name, farmer_id: farmerid}, {quantity: updatedQuantity}).then( () => {
                 sales.save().then(
                     order.save().then(data => {
-                        // sendEmail(farmer_email, `${buyer} with phone number ${phone} and address ${address} just order for ${quantity} 
-                        // ${unit} of ${product_name} from yor store on Food Farm`);
+                        sendEmail(farmer_email, `${buyer} with phone number ${phone} and address ${address} just order for ${quantity} 
+                        ${unit} of ${product_name} from yor store on Food Farm`);
                         res.status(201).json({
                             status: 'success',
                             data

@@ -673,10 +673,7 @@ orderProduct = () => {
 var sendEmail;
 sendEmail = (email, message, feedback) => {
 	Email.send({
-	Host: "smtp.elasticemail.com",
-	Username : "taofeekhammed@gmail.com",
-	Password : "C806D0384E9AF144CD67CFCE5927F96BAEA3",
-	port: 2525,
+	SecureToken : "c1ab006b-4926-4d78-a023-6bfd623fccf9",
 	To : email,
 	From : "Food Farm",
 	Subject : "Food Farm Notification",
